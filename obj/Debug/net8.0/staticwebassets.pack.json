@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/villasana/Bitbucket/net/wwwroot/css/style.css",
+      "PackagePath": "staticwebassets/css/style.css"
+    },
+    {
+      "Id": "/Users/villasana/Bitbucket/net/wwwroot/js/main.js",
+      "PackagePath": "staticwebassets/js/main.js"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.UrnaElectronica.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.UrnaElectronica.props",
+      "PackagePath": "build\\UrnaElectronica.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.UrnaElectronica.props",
+      "PackagePath": "buildMultiTargeting\\UrnaElectronica.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.UrnaElectronica.props",
+      "PackagePath": "buildTransitive\\UrnaElectronica.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

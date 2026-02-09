@@ -1,0 +1,55 @@
+@using UrnaElectronica.Models
+@model ConfiguracionUrna
+
+@{
+    ViewData["Title"] = "Editar Configuración";
+}
+
+<div class="page-header">
+    <h1>Editar Configuración</h1>
+</div>
+
+<form method="post" class="form-config" hx-boost="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="Nombre">Nombre de la Urna:</label>
+        <input type="text" id="Nombre" name="Nombre" class="form-control" value="@Model.Nombre" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Ubicacion">Ubicación:</label>
+        <input type="text" id="Ubicacion" name="Ubicacion" class="form-control" value="@Model.Ubicacion" required />
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label for="NumeroMesa">Número de Mesa:</label>
+            <input type="number" id="NumeroMesa" name="NumeroMesa" class="form-control" value="@Model.NumeroMesa" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Departamento">Departamento:</label>
+            <input type="text" id="Departamento" name="Departamento" class="form-control" value="@Model.Departamento" required />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Municipio">Municipio:</label>
+        <input type="text" id="Municipio" name="Municipio" class="form-control" value="@Model.Municipio" required />
+    </div>
+
+    <div class="form-group checkbox">
+        <input type="checkbox" id="Activa" name="Activa" @(Model.Activa ? "checked" : "") />
+        <label for="Activa">Urna Activa</label>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="/Configuracion" 
+           hx-get="/Configuracion" 
+           hx-target="#content-area"
+           hx-swap="innerHTML"
+           class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

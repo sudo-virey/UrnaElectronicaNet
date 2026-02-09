@@ -1,0 +1,76 @@
+@using UrnaElectronica.Models
+@model List<ConfiguracionUrna>
+
+@{
+    ViewData["Title"] = "Configuración Urnas";
+}
+
+<div class="page-header">
+    <h1>Gestión de Configuración</h1>
+    <p class="subtitle">Administra las configuraciones de las urnas electrónicas</p>
+</div>
+
+<div class="config-actions">
+    <a href="/Configuracion/Create" 
+       hx-get="/Configuracion/Create" 
+       hx-target="#content-area"
+       hx-swap="innerHTML"
+       class="btn btn-primary">+ Nueva Configuración</a>
+</div>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Número de Mesa</th>
+                <th>Departamento</th>
+                <th>Municipio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var config in Model)
+            {
+                <tr>
+                    <td>@config.Nombre</td>
+                    <td>@config.Ubicacion</td>
+                    <td>@config.NumeroMesa</td>
+                    <td>@config.Departamento</td>
+                    <td>@config.Municipio</td>
+                    <td>
+                        <span class="badge @(config.Activa ? "badge-success" : "badge-danger")">
+                            @(config.Activa ? "Activa" : "Inactiva")
+                        </span>
+                    </td>
+                    <td class="action-buttons">
+                        <a href="/Configuracion/Details/@config.Id" 
+                           hx-get="/Configuracion/Details/@config.Id" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="btn btn-sm btn-info">Ver</a>
+                        <a href="/Configuracion/Edit/@config.Id" 
+                           hx-get="/Configuracion/Edit/@config.Id" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="btn btn-sm btn-warning">Editar</a>
+                        <a href="/Configuracion/Delete/@config.Id" 
+                           hx-get="/Configuracion/Delete/@config.Id" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No hay configuraciones registradas. <a href="/Configuracion/Create">Crear una nueva</a>
+    </div>
+}

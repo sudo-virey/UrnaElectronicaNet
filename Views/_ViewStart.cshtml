@@ -1,0 +1,7 @@
+@{
+    // Detectar si es una solicitud HTMX
+    bool isHtmxRequest = Context.Request.Headers.ContainsKey("HX-Request");
+    
+    // Usar layout parcial para HTMX, layout completo para navegación normal
+    Layout = isHtmxRequest ? "_PartialLayout" : "_Layout";
+}

@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Resumen general del sistema electoral</p>
+</div>
+
+<!-- Estadísticas -->
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Total Elecciones</p>
+                <div class="stat-value">12</div>
+                <div class="stat-change positive">↑ 20% este mes</div>
+            </div>
+            <div class="stat-icon">🗳️</div>
+        </div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #17a2b8;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Total Urnas</p>
+                <div class="stat-value">48</div>
+                <div class="stat-change positive">95% Operativas</div>
+            </div>
+            <div class="stat-icon">📦</div>
+        </div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #28a745;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Total Impresoras</p>
+                <div class="stat-value">24</div>
+                <div class="stat-change negative">Sin cambios</div>
+            </div>
+            <div class="stat-icon">🖨️</div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimas Actividades -->
+<div class="table-container">
+    <div class="table-header">
+        <h3>Últimas Actividades</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo de Actividad</th>
+                <th>Elección</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>25 Oct, 2023</td>
+                <td>Registro de Urna</td>
+                <td>Elección Estudiantil 2023</td>
+                <td>Admin_01</td>
+                <td><span class="badge badge-success">Completado</span></td>
+            </tr>
+            <tr>
+                <td>24 Oct, 2023</td>
+                <td>Cierre de Votación</td>
+                <td>Consejo Universitario</td>
+                <td>Admin_02</td>
+                <td><span class="badge badge-warning">Finalizado</span></td>
+            </tr>
+            <tr>
+                <td>24 Oct, 2023</td>
+                <td>Mantenimiento Impresora</td>
+                <td>—</td>
+                <td>Tecnico_UI</td>
+                <td><span class="badge badge-primary">En Proceso</span></td>
+            </tr>
+            <tr>
+                <td>23 Oct, 2023</td>
+                <td>Apertura de Proceso</td>
+                <td>Sociedad de Alumnos</td>
+                <td>Admin_01</td>
+                <td><span class="badge badge-success">Activo</span></td>
+            </tr>
+            <tr>
+                <td>22 Oct, 2023</td>
+                <td>Configuración Urna</td>
+                <td>Elección Estudiantil 2023</td>
+                <td>Admin_01</td>
+                <td><span class="badge badge-success">Completado</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,226 @@
+@using UrnaElectronica.Models
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = null; // Sin layout
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Urna Electrónica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group.checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group.checkbox input {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .form-group.checkbox label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid #f5c6cb;
+            font-size: 0.9rem;
+        }
+
+        .validation-error {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .demo-credentials {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            border: 1px solid #bee5eb;
+        }
+
+        .demo-credentials p {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .demo-credentials code {
+            background: #fff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-family: monospace;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-icon">🗳️</div>
+            <h1>Urna Electrónica</h1>
+            <p>Sistema de Configuración Electoral</p>
+        </div>
+
+        @if (Model != null && !ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+        {
+            @foreach (var modelState in ViewData.ModelState.Values)
+            {
+                @foreach (var error in modelState.Errors)
+                {
+                    <div class="error-message">@error.ErrorMessage</div>
+                }
+            }
+        }
+
+        <form method="post" action="/Auth/Login">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="Email">Correo Electrónico</label>
+                <input type="email" id="Email" name="Email" class="form-control" 
+                       value="@(Model?.Email ?? "")" required />
+                @if (Model != null && !ViewData.ModelState.IsValid && ViewData.ModelState["Email"]?.Errors.Count > 0)
+                {
+                    <div class="validation-error">
+                        @ViewData.ModelState["Email"]?.Errors[0]?.ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label for="Contraseña">Contraseña</label>
+                <input type="password" id="Contraseña" name="Contraseña" class="form-control" required />
+                @if (Model != null && !ViewData.ModelState.IsValid && ViewData.ModelState["Contraseña"]?.Errors.Count > 0)
+                {
+                    <div class="validation-error">
+                        @ViewData.ModelState["Contraseña"]?.Errors[0]?.ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div class="form-group checkbox">
+                <input type="checkbox" id="RecuérdameBinding" name="RecuérdameBinding" />
+                <label for="RecuérdameBinding">Recuérdame en este navegador</label>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
+
+        <div class="demo-credentials">
+            <p>Credenciales de prueba:</p>
+            <p><strong>Admin:</strong> <code>admin@urna.gov</code> / <code>admin123</code></p>
+            <p><strong>Operador:</strong> <code>operador@urna.gov</code> / <code>operador123</code></p>
+        </div>
+    </div>
+</body>
+</html>

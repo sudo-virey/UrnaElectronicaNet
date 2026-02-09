@@ -1,0 +1,41 @@
+@using UrnaElectronica.Models
+@model ConfiguracionUrna
+
+@{
+    ViewData["Title"] = "Eliminar Configuración";
+}
+
+<div class="page-header">
+    <h1>Eliminar Configuración</h1>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Advertencia:</strong> Esta acción no se puede deshacer. ¿Está seguro de que desea eliminar esta configuración?
+</div>
+
+<div class="details-card">
+    <div class="detail-item">
+        <span class="label">Nombre:</span>
+        <span class="value">@Model.Nombre</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Ubicación:</span>
+        <span class="value">@Model.Ubicacion</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Número de Mesa:</span>
+        <span class="value">@Model.NumeroMesa</span>
+    </div>
+</div>
+
+<form method="post" class="form-actions">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+    <a href="/Configuracion" 
+       hx-get="/Configuracion" 
+       hx-target="#content-area"
+       hx-swap="innerHTML"
+       class="btn btn-secondary">Cancelar</a>
+</form>

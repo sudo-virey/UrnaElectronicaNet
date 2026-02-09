@@ -1,0 +1,62 @@
+@using UrnaElectronica.Models
+@model ConfiguracionUrna
+
+@{
+    ViewData["Title"] = "Detalles de Configuración";
+}
+
+<div class="page-header">
+    <h1>@Model.Nombre</h1>
+</div>
+
+<div class="details-card">
+    <div class="detail-item">
+        <span class="label">ID:</span>
+        <span class="value">@Model.Id</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Ubicación:</span>
+        <span class="value">@Model.Ubicacion</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Número de Mesa:</span>
+        <span class="value">@Model.NumeroMesa</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Departamento:</span>
+        <span class="value">@Model.Departamento</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Municipio:</span>
+        <span class="value">@Model.Municipio</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Estado:</span>
+        <span class="value">
+            <span class="badge @(Model.Activa ? "badge-success" : "badge-danger")">
+                @(Model.Activa ? "Activa" : "Inactiva")
+            </span>
+        </span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Fecha de Creación:</span>
+        <span class="value">@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Última Actualización:</span>
+        <span class="value">@Model.FechaActualizacion.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
+</div>
+
+<div class="form-actions">
+    <a href="/Configuracion/Edit/@Model.Id" class="btn btn-warning">Editar</a>
+    <a href="/Configuracion/Delete/@Model.Id" class="btn btn-danger">Eliminar</a>
+    <a href="/Configuracion" class="btn btn-secondary">Volver</a>
+</div>
