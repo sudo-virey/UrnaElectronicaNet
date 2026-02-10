@@ -1,0 +1,46 @@
+@model List<ProcesoElectoral>
+
+@{
+    ViewData["Title"] = "Procesos Electorales";
+}
+
+<div class="page-header">
+    <h1>Procesos Electorales</h1>
+    <p class="subtitle">Gestión de procesos y fechas electorales</p>
+</div>
+
+<div style="margin-bottom: 2rem;">
+    <a href="/ProcesoElectoral/Create" class="btn btn-primary">+ Nuevo Proceso</a>
+</div>
+
+<div class="table-container">
+    <div class="table-header">
+        <h3>Procesos Registrados</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var proceso in Model)
+            {
+                <tr>
+                    <td><strong>@proceso.Nombre</strong></td>
+                    <td>@proceso.Descripcion</td>
+                    <td>@proceso.FechaInicio.ToString("dd MMM yyyy")</td>
+                    <td>@proceso.FechaFin.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a href="/ProcesoElectoral/Details/@proceso.Id" class="btn btn-sm btn-info">Ver</a>
+                        <a href="/ProcesoElectoral/Edit/@proceso.Id" class="btn btn-sm btn-warning">Editar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Reportes";
+}
+
+<div class="page-header">
+    <h1>Reportes</h1>
+    <p class="subtitle">Generación y descarga de reportes electorales</p>
+</div>
+
+<div class="table-container">
+    <div class="table-header">
+        <h3>Reportes Disponibles</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Última Generación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Participación Electoral</strong></td>
+                <td>Estadísticas</td>
+                <td>@DateTime.Now.AddDays(-2).ToString("dd MMM yyyy")</td>
+                <td><span class="badge badge-success">Disponible</span></td>
+                <td>
+                    <a href="/Reportes/ParticipacionElectoral" class="btn btn-sm btn-info">Ver</a>
+                    <button class="btn btn-sm btn-primary" onclick="descargarPDF(1)">PDF</button>
+                    <button class="btn btn-sm btn-primary" onclick="descargarExcel(1)">Excel</button>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Validez de Urnas</strong></td>
+                <td>Técnico</td>
+                <td>@DateTime.Now.AddDays(-1).ToString("dd MMM yyyy")</td>
+                <td><span class="badge badge-success">Disponible</span></td>
+                <td>
+                    <a href="/Reportes/ValidezUrnas" class="btn btn-sm btn-info">Ver</a>
+                    <button class="btn btn-sm btn-primary" onclick="descargarPDF(2)">PDF</button>
+                    <button class="btn btn-sm btn-primary" onclick="descargarExcel(2)">Excel</button>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Candidatos Registrados</strong></td>
+                <td>Administrativo</td>
+                <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
+                <td><span class="badge badge-success">Disponible</span></td>
+                <td>
+                    <a href="/Reportes/CandidatosRegistrados" class="btn btn-sm btn-info">Ver</a>
+                    <button class="btn btn-sm btn-primary" onclick="descargarPDF(3)">PDF</button>
+                    <button class="btn btn-sm btn-primary" onclick="descargarExcel(3)">Excel</button>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Auditoría de Certificados</strong></td>
+                <td>Seguridad</td>
+                <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
+                <td><span class="badge badge-success">Disponible</span></td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-info">Ver</a>
+                    <button class="btn btn-sm btn-primary" onclick="descargarPDF(4)">PDF</button>
+                    <button class="btn btn-sm btn-primary" onclick="descargarExcel(4)">Excel</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function descargarPDF(reporteId) {
+    // TODO: Implementar descarga PDF
+    alert('Descargando reporte PDF #' + reporteId);
+}
+
+function descargarExcel(reporteId) {
+    // TODO: Implementar descarga Excel
+    alert('Descargando reporte Excel #' + reporteId);
+}
+</script>

@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Entidades Políticas";
+}
+
+<div class="page-header">
+    <h1>Entidades Políticas</h1>
+    <p class="subtitle">Gestión de partidos, movimientos y candidatos</p>
+</div>
+
+<!-- Estadísticas -->
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Entidades</p>
+                <div class="stat-value">@ViewBag.TotalEntidades</div>
+            </div>
+            <div class="stat-icon">🏛️</div>
+        </div>
+        <div class="stat-change positive">Activas en proceso</div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #17a2b8;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Candidatos</p>
+                <div class="stat-value">@ViewBag.TotalCandidatos</div>
+            </div>
+            <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-change positive">Registrados totales</div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #28a745;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Promedio</p>
+                <div class="stat-value">@((ViewBag.TotalCandidatos / ViewBag.TotalEntidades).ToString("F0"))</div>
+            </div>
+            <div class="stat-icon">📊</div>
+        </div>
+        <div class="stat-change positive">Candidatos por entidad</div>
+    </div>
+</div>
+
+<div style="margin-bottom: 2rem;">
+    <a href="/EntidadPolitica/Create" class="btn btn-primary">+ Registrar Entidad</a>
+</div>
+
+<div class="table-container">
+    <div class="table-header">
+        <h3>Entidades Registradas</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Siglas</th>
+                <th>Tipo</th>
+                <th>Candidatos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var entidadesList = new List<dynamic>
+                {
+                    new { Id = 1, Nombre = "Partido Democrático", Siglas = "PD", Tipo = "Partido", Candidatos = 45, Estado = "Activo" },
+                    new { Id = 2, Nombre = "Movimiento Ciudadano", Siglas = "MC", Tipo = "Movimiento", Candidatos = 38, Estado = "Activo" },
+                    new { Id = 3, Nombre = "Unidad Popular", Siglas = "UP", Tipo = "Coalición", Candidatos = 62, Estado = "Activo" },
+                    new { Id = 4, Nombre = "Independientes", Siglas = "IND", Tipo = "Independientes", Candidatos = 12, Estado = "Activo" }
+                };
+            }
+            @foreach (var entidad in entidadesList)
+            {
+                <tr>
+                    <td><strong>@entidad.Nombre</strong></td>
+                    <td>@entidad.Siglas</td>
+                    <td>@entidad.Tipo</td>
+                    <td><span class="badge badge-info">@entidad.Candidatos candidatos</span></td>
+                    <td><span class="badge badge-success">@entidad.Estado</span></td>
+                    <td>
+                        <a href="/EntidadPolitica/Details/@entidad.Id" class="btn btn-sm btn-info">Ver</a>
+                        <a href="/EntidadPolitica/Candidatos/@entidad.Id" class="btn btn-sm btn-primary">Candidatos</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

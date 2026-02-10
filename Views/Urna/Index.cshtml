@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Urnas Electrónicas";
+}
+
+@{
+    var urnas = ViewBag.Urnas as List<dynamic>;
+}
+
+<div class="page-header">
+    <h1>Urnas Electrónicas</h1>
+    <p class="subtitle">Gestión y monitoreo de dispositivos de votación</p>
+</div>
+
+<!-- Estadísticas -->
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Total Urnas</p>
+                <div class="stat-value">@ViewBag.TotalUrnas</div>
+            </div>
+            <div class="stat-icon">📦</div>
+        </div>
+        <div class="stat-change positive">Todas registradas</div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #28a745;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Operativas</p>
+                <div class="stat-value">@ViewBag.Operativas</div>
+            </div>
+            <div class="stat-icon">✅</div>
+        </div>
+        <div class="stat-change positive">@((ViewBag.Operativas * 100 / ViewBag.TotalUrnas).ToString("F0"))% disponibles</div>
+    </div>
+
+    <div class="stat-card" style="border-left-color: #ffc107;">
+        <div class="stat-header">
+            <div>
+                <p class="stat-label">Mantenimiento</p>
+                <div class="stat-value">@ViewBag.EnMantenimiento</div>
+            </div>
+            <div class="stat-icon">🔧</div>
+        </div>
+        <div class="stat-change negative">En proceso</div>
+    </div>
+</div>
+
+<div style="margin-bottom: 2rem;">
+    <a href="/Urna/Create" class="btn btn-primary">+ Registrar Urna</a>
+</div>
+
+<div class="table-container">
+    <div class="table-header">
+        <h3>Listado de Urnas</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Estado</th>
+                <th>Ubicación</th>
+                <th>Versión Software</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var urnasList = new List<dynamic>
+                {
+                    new { Id = 1, Codigo = "URN-001", Estado = "Operativa", UbicacionFisica = "Aula A-101", VersionSoftware = "2.1.0" },
+                    new { Id = 2, Codigo = "URN-002", Estado = "Operativa", UbicacionFisica = "Aula A-102", VersionSoftware = "2.1.0" },
+                    new { Id = 3, Codigo = "URN-003", Estado = "Mantenimiento", UbicacionFisica = "Aula B-201", VersionSoftware = "2.0.5" },
+                    new { Id = 4, Codigo = "URN-004", Estado = "Operativa", UbicacionFisica = "Aula B-202", VersionSoftware = "2.1.0" }
+                };
+            }
+            @foreach (var urna in urnasList)
+            {
+                <tr>
+                    <td><strong>@urna.Codigo</strong></td>
+                    <td>
+                        @if (urna.Estado == "Operativa")
+                        {
+                            <span class="badge badge-success">@urna.Estado</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">@urna.Estado</span>
+                        }
+                    </td>
+                    <td>@urna.UbicacionFisica</td>
+                    <td>@urna.VersionSoftware</td>
+                    <td>
+                        <a href="/Urna/Details/@urna.Id" class="btn btn-sm btn-info">Ver</a>
+                        <a href="/Urna/Verificar/@urna.Id" class="btn btn-sm btn-primary">Verificar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

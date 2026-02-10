@@ -25,8 +25,8 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li>
-                        <a href="/" 
-                           hx-get="/" 
+                        <a href="/Home" 
+                           hx-get="/Home" 
                            hx-target="#content-area"
                            hx-swap="innerHTML"
                            class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
@@ -35,27 +35,51 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/Configuracion" 
-                           hx-get="/Configuracion" 
+                        <a href="/ProcesoElectoral" 
+                           hx-get="/ProcesoElectoral" 
                            hx-target="#content-area"
                            hx-swap="innerHTML"
-                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Configuracion" ? "active" : "")">
-                            <span class="nav-icon">⚙️</span>
-                            <span class="nav-label">Gestión de Urnas</span>
+                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ProcesoElectoral" ? "active" : "")">
+                            <span class="nav-icon">🗳️</span>
+                            <span class="nav-label">Procesos Electorales</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/Privacy" 
-                           hx-get="/Privacy" 
+                        <a href="/Urna" 
+                           hx-get="/Urna" 
                            hx-target="#content-area"
                            hx-swap="innerHTML"
-                           class="nav-item">
-                            <span class="nav-icon">🔒</span>
-                            <span class="nav-label">Seguridad</span>
+                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Urna" ? "active" : "")">
+                            <span class="nav-icon">📦</span>
+                            <span class="nav-label">Urnas</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item">
+                        <a href="/Impresora" 
+                           hx-get="/Impresora" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Impresora" ? "active" : "")">
+                            <span class="nav-icon">🖨️</span>
+                            <span class="nav-label">Impresoras</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/EntidadPolitica" 
+                           hx-get="/EntidadPolitica" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "EntidadPolitica" ? "active" : "")">
+                            <span class="nav-icon">🏛️</span>
+                            <span class="nav-label">Entidades Políticas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Reportes" 
+                           hx-get="/Reportes" 
+                           hx-target="#content-area"
+                           hx-swap="innerHTML"
+                           class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Reportes" ? "active" : "")">
                             <span class="nav-icon">📈</span>
                             <span class="nav-label">Reportes</span>
                         </a>
