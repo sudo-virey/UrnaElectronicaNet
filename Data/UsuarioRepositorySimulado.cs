@@ -20,7 +20,7 @@ namespace UrnaElectronica.Data
                 Id = 1,
                 Nombre = "Administrador",
                 Email = "admin@urna.gob",
-                Contraseña = HashPassword("admin123"),
+                Contraseña = "JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=",
                 Rol = "Admin",
                 Activo = true
             },
@@ -29,7 +29,7 @@ namespace UrnaElectronica.Data
                 Id = 2,
                 Nombre = "Operador Electoral",
                 Email = "operador@urna.gob",
-                Contraseña = HashPassword("operador123"),
+                Contraseña = "o9fTNdI+TL5ghvJwLcCUfuT8OxBNMQE2jNRx0V/3PUg=",
                 Rol = "Operador",
                 Activo = true
             },
@@ -38,7 +38,7 @@ namespace UrnaElectronica.Data
                 Id = 3,
                 Nombre = "Supervisor",
                 Email = "supervisor@urna.gob",
-                Contraseña = HashPassword("supervisor123"),
+                Contraseña = "0ZHKqvBMFvABuPjhQKKPzLZrIiPFl1mYQH7iCZkPqQI=",
                 Rol = "Supervisor",
                 Activo = true
             }

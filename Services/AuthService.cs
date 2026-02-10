@@ -87,9 +87,12 @@ namespace UrnaElectronica.Services
         /// <summary>
         /// Verifica si una contraseña en texto plano coincide con su hash.
         /// </summary>
-        private static bool VerifyPassword(string password, string hash)
+        private bool VerifyPassword(string password, string hash)
         {
             var hashOfInput = HashPassword(password);
+            _logger.LogInformation($"[DEBUG] Hash ingresado calculado: {hashOfInput}");
+            _logger.LogInformation($"[DEBUG] Hash almacenado: {hash}");
+            _logger.LogInformation($"[DEBUG] ¿Coinciden?: {hashOfInput == hash}");
             return hashOfInput == hash;
         }
     }
