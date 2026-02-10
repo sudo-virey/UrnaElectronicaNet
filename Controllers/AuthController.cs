@@ -1,43 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using UrnaElectronica.Models;
-using System.Security.Cryptography;
-using System.Text;
+using UrnaElectronica.Services;
 
 namespace UrnaElectronica.Controllers
 {
+    /// <summary>
+    /// Controlador de autenticación.
+    /// Maneja el login, logout y validación de sesiones.
+    /// </summary>
     public class AuthController : Controller
     {
+        private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
-        
-        // Base de datos simulada en memoria
-        private static List<Usuario> _usuarios = new()
-        {
-            new Usuario
-            {
-                Id = 1,
-                Nombre = "Administrador",
-                Email = "admin@urna.gov",
-                Contraseña = HashPassword("admin123"),
-                Rol = "Admin",
-                Activo = true
-            },
-            new Usuario
-            {
-                Id = 2,
-                Nombre = "Operador",
-                Email = "operador@urna.gov",
-                Contraseña = HashPassword("operador123"),
-                Rol = "Operador",
-                Activo = true
-            }
-        };
 
-        public AuthController(ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
+            _authService = authService;
             _logger = logger;
         }
 
-        // GET: Auth/Login
+        /// <summary>
+        /// GET: Mostrar página de login
+        /// </summary>
+        [HttpGet]
         public IActionResult Login()
         {
             // Si el usuario ya está logueado, redirigir a Home
@@ -48,61 +33,94 @@ namespace UrnaElectronica.Controllers
             return View(new LoginViewModel());
         }
 
-        // POST: Auth/Login
+        /// <summary>
+        /// POST: Procesar login
+        /// Valida credenciales y establece la sesión si son válidas
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([Bind("Email,Contraseña,RecuérdameBinding")] LoginViewModel model)
+        public async Task<IActionResult> Login([Bind("Email,Contraseña,RecuérdameBinding")] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var usuario = _usuarios.FirstOrDefault(u =>
-                    u.Email == model.Email &&
-                    u.Activo &&
-                    VerifyPassword(model.Contraseña, u.Contraseña));
+                try
+                {
+                    // Validar credenciales usando el servicio de autenticación
+                    var usuario = await _authService.ValidarCredencialesAsync(model.Email, model.Contraseña);
 
-                if (usuario != null)
-                {
-                    // Guardar en sesión
-                    HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
-                    HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
-                    HttpContext.Session.SetString("UsuarioRol", usuario.Rol);
-                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
-                    
-                    _logger.LogInformation($"Usuario {usuario.Email} autenticado correctamente");
-                    
-                    return RedirectToAction("Index", "Home");
+                    if (usuario != null)
+                    {
+                        // Establecer la sesión
+                        HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
+                        HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
+                        HttpContext.Session.SetString("UsuarioRol", usuario.Rol);
+                        HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+
+                        // Opcional: Configurar cookie de "Recuérdame" si está marcado
+                        if (model.RecuérdameBinding)
+                        {
+                            // TODO: Implementar cookie de "Recuérdame" persistent
+                            _logger.LogInformation($"Cookie de recuérdame requerida para: {usuario.Email}");
+                        }
+
+                        _logger.LogInformation($"Login exitoso para usuario: {usuario.Email}");
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Email o contraseña incorrectos");
+                        _logger.LogWarning($"Intento de login fallido para: {model.Email}");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Email o contraseña incorrectos");
-                    _logger.LogWarning($"Intento de login fallido para: {model.Email}");
+                    _logger.LogError($"Error durante login: {ex.Message}");
+                    ModelState.AddModelError("", "Error al procesar el login. Por favor intente de nuevo.");
                 }
             }
+            
             return View(model);
         }
 
-        // GET: Auth/Logout
+        /// <summary>
+        /// GET: Cerrar sesión
+        /// </summary>
+        [HttpGet]
         public IActionResult Logout()
         {
+            var email = HttpContext.Session.GetString("UsuarioEmail");
             HttpContext.Session.Clear();
+            
+            if (!string.IsNullOrEmpty(email))
+            {
+                _logger.LogInformation($"Logout realizado para: {email}");
+            }
+
             return RedirectToAction("Login");
         }
 
-        // Método auxiliar para hash de contraseña
-        private static string HashPassword(string password)
+        /// <summary>
+        /// GET: Validar si la sesión está activa
+        /// Útil para AJAX/API calls
+        /// </summary>
+        [HttpGet]
+        public IActionResult ValidarSesion()
         {
-            using (var sha256 = SHA256.Create())
+            var usuarioEmail = HttpContext.Session.GetString("UsuarioEmail");
+            
+            if (!string.IsNullOrEmpty(usuarioEmail))
             {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
+                return Ok(new
+                {
+                    activa = true,
+                    nombre = HttpContext.Session.GetString("UsuarioNombre"),
+                    rol = HttpContext.Session.GetString("UsuarioRol"),
+                    email = usuarioEmail,
+                    id = HttpContext.Session.GetInt32("UsuarioId")
+                });
             }
-        }
 
-        // Método auxiliar para verificar contraseña
-        private static bool VerifyPassword(string password, string hash)
-        {
-            var hashOfInput = HashPassword(password);
-            return hashOfInput == hash;
+            return Unauthorized(new { activa = false });
         }
     }
 }

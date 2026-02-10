@@ -1,3 +1,6 @@
+using UrnaElectronica.Services;
+using UrnaElectronica.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
@@ -10,6 +13,11 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Registrar servicios de autenticación
+// TODO: Reemplazar UsuarioRepositorySimulado con UsuarioRepositoryEF cuando se use Entity Framework
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepositorySimulado>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
