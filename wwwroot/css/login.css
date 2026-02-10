@@ -1,0 +1,269 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    min-height: 100vh;           /* Al menos la altura de la ventana */
+    display: flex;                /* Centra el contenido */
+    flex-direction: column;       /* Coloca el contenido en columna */
+    justify-content: center;      /* Centro vertical */
+    align-items: center;          /* Centro horizontal */
+    background: linear-gradient(to bottom, #FFFFFF 0%, #f4c54237 100%); /* Fondo degradado suave */
+    position: relative;           /* Base para elementos posicionados */
+    overflow: hidden;             /* Oculta el overflow */
+    width: 100%;
+    max-width: 100%;
+}
+
+body::before {
+    content: '';              /* Crea un pseudo-elemento */
+    position: absolute;       /* Se posiciona sobre el body */
+    width: 200%;             /* Más grande que el contenedor */
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px); /* Patrón de puntos */
+    background-size: 50px 50px;  /* Tamaño de la cuadrícula */
+    animation: float 20s linear infinite;  /* Anima durante 20 segundos infinitamente */
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }      /* Posición inicial */
+    100% { transform: translate(50px, 50px); }  /* Se mueve 50px diagonalmente */
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95);   /* Blanco casi opaco */
+    padding: 1.5rem 1.2rem;                 /* Espaciado interno reducido */
+    border-radius: 12px;                     /* Esquinas redondeadas */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+    width: 100%;
+    max-width: 360px;                        /* Ancho máximo reducido */
+    max-height: 80vh;                        /* Altura máxima relativa a la ventana */
+    backdrop-filter: blur(10px);             /* Efecto de cristal esmerilado */
+    border: 1px solid rgba(255, 255, 255, 0.2);  /* Borde sutil */
+    position: relative;
+    z-index: 10;                             /* Sobre el fondo animado */
+}
+
+.login-header {
+    text-align: center;           /* Centra el texto */
+    margin-bottom: 1.2rem;        /* Espacio abajo reducido */
+    padding-bottom: 1.2rem;       /* Espacio interno abajo reducido */
+    border-bottom: none/* 2px solid #f0f0f0;  /* Línea separadora */
+}
+
+.login-header h1 {
+    font-size: 1.4rem;
+   color: #C1272D;               /* Azul oscuro */
+    font-weight: 700;             /* Muy bold */
+}
+
+.login-header p {
+    color: #666;                  /* Gris oscuro */
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.login-icon {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;      /* Centra la imagen */
+}
+
+.login-icon img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;          /* Mantiene proporción de la imagen */
+    filter: drop-shadow(0 4px 12px rgba(30, 60, 114, 0.15));  /* Sombra en la imagen */
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%); /* Efecto de máscara para suavizar bordes */
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%); /* Compatibilidad con Safari */
+}
+
+.form-group {
+    margin-bottom: 1rem;          /* Espacio entre campos reducido */
+}
+
+.form-group label {
+    display: block;               /* La etiqueta ocupa toda la fila */
+    margin-bottom: 0.625rem;      /* Espacio bajo la etiqueta */
+    color: #333;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;                  /* Ocupa todo el ancho */
+    padding: 0.9rem 1rem;         /* Espaciado interno */
+    border: 1.5px solid #e0e0e0;  /* Borde gris claro */
+    border-radius: 8px;           /* Esquinas redondeadas */
+    transition: all 0.3s ease;    /* Transición suave en cambios */
+    background: #fafafa;          /* Gris muy claro */
+}
+
+.form-group input:hover {
+    background: #fff;             /* Fondo blanco al pasar el ratón */
+    border-color: #d0d0d0;        /* Borde más oscuro */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #f1c65169;        /* Amarillo institucional */
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(244, 197, 66, 0.3);  /* Halo amarillo */
+}
+
+
+.form-group.checkbox {
+    display: flex;                /* Pone label e input en la misma fila */
+    align-items: center;          /* Los alinea verticalmente */
+    margin-bottom: 1rem;          /* Espacio reducido */
+}
+
+.form-group.checkbox input {
+    width: auto;                  /* El checkbox no se estira */
+    margin-right: 0.75rem;        /* Espacio entre checkbox y texto */
+    cursor: pointer;              /* Cambia el cursor */
+}
+
+.form-group.checkbox label {
+    margin: 0;                    /* Sin margen */
+    font-weight: 500;
+    cursor: pointer;              /* Se puede hacer clic */
+}
+
+.btn-login {
+    width: 100%;
+    padding: 1rem;                /* Botón con buen tamaño */
+    background: linear-gradient(135deg, #F4C542 0%, #FFD966 100%); /* amarillo cálido */ 
+    color: #333; /* Texto oscuro para contraste */
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;    /* Animación suave */
+   box-shadow: 0 4px 12px rgba(244, 197, 66, 0.4);  /* Sombra */
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);  /* Se mueve 2px hacia arriba */
+    box-shadow: 0 6px 18px rgba(244, 197, 66, 0.5);  /* Sombra más grande */
+}
+
+.btn-login:active {
+    transform: translateY(0);     /* Vuelve a su posición */
+    box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);  /* Sombra normal */
+}
+
+.error-message {
+    background-color: #fee;       /* Fondo rojo claro */
+    color: #c33;                  /* Texto rojo */
+    padding: 0.9rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #c33;  /* Línea roja a la izquierda */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.validation-error {
+    color: #c33;                  /* Texto rojo para errores */
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    font-weight: 500;
+}
+
+.demo-credentials {
+    background: linear-gradient(135deg, #f0f7ff 0%, #f5f9ff 100%);  /* Fondo azul suave */
+    color: #1e3c72;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    border: 1px solid #d0e4f7;    /* Borde azul claro */
+}
+
+.demo-credentials p {
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #2a5298;               /* Azul más oscuro */
+}
+
+.demo-credentials code {
+    background: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;  /* Fuente monoespaciada */
+    border: 1px solid #e0e0e0;
+}
+
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-group .form-control {
+    padding-right: 2.5rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password:hover {
+    color: #2a5298;
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Footer */
+.app-footer {
+    background: transparent;
+    padding: 1.5rem 2rem;
+    border-top: nome; /* Sin borde */
+    text-align: center;
+    color: #999;
+    font-size: 0.85rem;
+    margin-top: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.app-footer p {
+    margin: 0;
+}
+
+/* Media queries para pantallas grandes */
+@media (min-width: 768px) {
+    .login-container {
+        padding: 1.5rem 1.2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        max-width: 100vw;
+        padding: 0 2rem;
+    }
+    
+    .login-container {
+        padding: 1.5rem 1.2rem;
+    }
+}
