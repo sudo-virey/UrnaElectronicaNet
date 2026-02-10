@@ -1,23 +1,42 @@
+/**
+ * ================================
+ * ESTILOS PRINCIPALES - URNA ELECTRÓNICA
+ * ================================
+ * Panel de administración con diseño responsivo
+ * Colores: #B19012 (dorado), #A43603 (naranja)
+ */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/**
+ * VARIABLES CSS - TOKENS DE DISEÑO
+ * Define colores, tamaños y espaciados reutilizables en todo el proyecto
+ */
 :root {
-    --primary-color: #B19012;
-    --primary-dark: #A43603;
-    --secondary-color: #A43603;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #17a2b8;
-    --light-gray: #f5f5f5;
-    --border-color: #e0e0e0;
-    --text-dark: #333;
-    --text-light: #666;
-    --sidebar-width: 260px;
-    --header-height: 70px;
+    /* Colores primarios del tema */
+    --primary-color: #B19012;        /* Dorado - color principal */
+    --primary-dark: #A43603;         /* Naranja oscuro - hover/active */
+    --secondary-color: #A43603;      /* Color secundario */
+    
+    /* Colores de estado */
+    --success-color: #28a745;        /* Verde - éxito */
+    --warning-color: #ffc107;        /* Amarillo - advertencia */
+    --danger-color: #dc3545;         /* Rojo - peligro */
+    --info-color: #17a2b8;           /* Cian - información */
+    
+    /* Colores neutrales */
+    --light-gray: #f5f5f5;           /* Fondo claro */
+    --border-color: #e0e0e0;         /* Bordes */
+    --text-dark: #333;               /* Texto principal */
+    --text-light: #666;              /* Texto secundario */
+    
+    /* Dimensiones del layout */
+    --sidebar-width: 260px;          /* Ancho del sidebar expandido */
+    --header-height: 70px;           /* Altura del header*/
 }
 
 body {
@@ -32,8 +51,13 @@ body {
     display: flex;
     min-height: 100vh;
 }
-
-/* Sidebar */
+ 
+/**
+ * SIDEBAR - NAVEGACIÓN LATERAL
+ * - Panel fijo en la izquierda (z-index: 1000)
+ * - Contiene logo, menú de navegación y datos del usuario
+ * - Se colapsa a 70px en pantallas pequeñas
+ */
 .sidebar {
     width: var(--sidebar-width);
     background: white;/*linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);*/
@@ -90,6 +114,11 @@ body {
     margin: 0.5rem 0;
 }
 
+/**
+ * Items del menú lateral con estados
+ * - :hover - fondo translúcido
+ * - .active - borde izquierdo blanco + fondo
+ */
 .nav-item {
     display: flex;
     align-items: center;
@@ -183,6 +212,11 @@ body {
     background: rgba(220, 53, 69, 1);
 }
 
+/**
+ * CONTENIDO PRINCIPAL
+ * - Layout flexible: sidebar fijo + área de contenido
+ * - Margen izquierdo igual al ancho del sidebar
+ */
 /* Main Content */
 .main-content {
     flex: 1;
@@ -192,6 +226,12 @@ body {
     min-height: 100vh;
 }
 
+/**
+ * HEADER SUPERIOR
+ * - Barra con título de página y controles
+ * - Altura fija de 70px
+ * - Sombra sutil para separación visual
+ */
 /* Top Header */
 .top-header {
     background: white;
@@ -252,14 +292,34 @@ body {
     overflow-y: auto;
 }
 
+/**
+ * DASHBOARD - TARJETAS DE ESTADÍSTICAS
+ * Grid responsivo que muestra KPIs principales
+ * Características:
+ * - min-width: 260px (ancho mínimo de card)
+ * - max-width: 1200px (contenedor máximo)
+ * - auto-fit: ajusta columnas según espacio disponible
+ * - max-width: 350px por card para mantener proporción
+ */
 /* Dashboard Cards */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.2rem;
     margin-bottom: 2rem;
+    max-width: 1200px;
 }
 
+/**
+ * TARJETA DE ESTADÍSTICA INDIVIDUAL
+ * Componente que muestra un KPI con:
+ * - Icono emoji
+ * - Etiqueta (uppercase)
+ * - Número principal
+ * - Cambio/estado
+ * - Barra de color lateral: 4px left-border
+ * - Efecto hover: sube 3px + sombra
+ */
 .stat-card {
     background: white;
     padding: 1.4rem;
@@ -271,6 +331,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    max-width: 350px;
 }
 
 .stat-card:hover {
@@ -327,6 +388,13 @@ body {
     color: #888;
 }
 
+/**
+ * TABLAS - LISTADOS DE DATOS
+ * Contenedor con estilos aplicados a:
+ * - Headers: fondo gris claro, mayúsculas
+ * - Filas: hover con fondo gradiente dorado
+ * - Bordes: líneas sutiles en gris claro
+ */
 /* Tables */
 .table-container {
     background: white;
@@ -393,6 +461,15 @@ body {
     gap: 0.5rem;
 }
 
+/**
+ * BADGES - ETIQUETAS DE ESTADO
+ * Componentes pequeños para mostrar estados
+ * Variantes:
+ * - badge-success: verde claro (fondo), verde oscuro (texto)
+ * - badge-warning: amarillo claro (fondo), marrón (texto)
+ * - badge-danger: rojo claro (fondo), rojo oscuro (texto)
+ * - badge-primary: azul claro (fondo), azul oscuro (texto)
+ */
 /* Badges */
 .badge {
     display: inline-block;
@@ -423,6 +500,21 @@ body {
     color: #0054b3;
 }
 
+/**
+ * BOTONES
+ * Sistema de botones con estados
+ * Variantes:
+ * - btn-primary: dorado (color principal)
+ * - btn-secondary: gris
+ * - btn-danger: rojo (peligro)
+ * - btn-info: cyan (información)
+ * - btn-warning: amarillo (advertencia)
+ * - btn-sm: versión pequeña
+ * 
+ * Efectos comunes:
+ * - Sombra sutil por defecto
+ * - Hover: sombra aumentada + translateY(-1px)
+ */
 /* Buttons */
 .btn {
     display: inline-block;
@@ -503,6 +595,14 @@ body {
     box-shadow: none;
 }
 
+/**
+ * FORMULARIOS
+ * Estilos para inputs, selects
+ * Estados:
+ * - Default: borde gris claro
+ * - Focus: borde dorado + sombra sutil dorada
+ * - Validación: se usa colores de estado (success, danger, etc)
+ */
 /* Forms */
 .form-group {
     margin-bottom: 1.5rem;
@@ -530,6 +630,13 @@ body {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/**
+ * FOOTER
+ * Pie de página con copyright y enlaces
+ * - Margen superior automático (empuja hacia abajo)
+ * - Borde superior de separación
+ * - Enlaces en color dorado principal
+ */
 /* Footer */
 .app-footer {
     background: white;
@@ -556,12 +663,30 @@ body {
     text-decoration: none;
 }
 
+/**
+ * ================================
+ * MEDIA QUERIES - RESPONSIVE DESIGN
+ * ================================
+ * Breakpoints principales:
+ * - 1200px: Tablets grandes (2 columnas en dashboard)
+ * - 768px: Tablets/IPads (sidebar colapsa, 1 columna)
+ * - 480px: Móviles pequeños (compresión de elementos)
+ */
+
+/* Pantallas extra grandes: 2 columnas en dashboard */
 @media (max-width: 1200px) {
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
+/**
+ * TABLET / PANTALLA MEDIA
+ * - Sidebar colapsa a 70px (solo iconos)
+ * - Dashboard: 1 columna
+ * - Padding reducido
+ * - Labels y textos auxiliares desaparecen
+ */
 @media (max-width: 768px) {
     :root {
         --sidebar-width: 70px;
@@ -601,6 +726,13 @@ body {
     }
 }
 
+/**
+ * MÓVIL / PANTALLA PEQUEÑA
+ * - Compresión extrema de elementos
+ * - Font sizes reducidos
+ * - Gap entre cards más pequeño (0.8rem)
+ * - Valores de estadísticas más pequeños
+ */
 @media (max-width: 480px) {
     .dashboard-grid {
         gap: 0.8rem;
