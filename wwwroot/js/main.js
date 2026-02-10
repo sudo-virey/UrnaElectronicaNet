@@ -17,6 +17,22 @@ function initializeEventListeners() {
             }
         });
     });
+
+    // Toggle password visibility
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    if (togglePasswordBtn) {
+        const passwordInput = document.getElementById('Contraseña');
+        const eyeIcon = togglePasswordBtn.querySelector('.eye-icon');
+        const eyeOffIcon = togglePasswordBtn.querySelector('.eye-off-icon');
+
+        togglePasswordBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            eyeIcon.style.display = isPassword ? 'none' : 'block';
+            eyeOffIcon.style.display = isPassword ? 'block' : 'none';
+        });
+    }
 }
 
 // Utility function to show notifications
