@@ -4,43 +4,111 @@
     ViewData["Title"] = "Procesos Electorales";
 }
 
+<!-- CSS para Modal -->
+<link href="~/css/procesos-modal.css" rel="stylesheet" />
+
 <div class="page-header">
     <h1>Procesos Electorales</h1>
-    <p class="subtitle">Gestión de procesos y fechas electorales</p>
+    <p class="subtitle">Gestión de procesos electorales - crear, editar y eliminar</p>
 </div>
 
 <div style="margin-bottom: 2rem;">
-    <a href="/ProcesoElectoral/Create" class="btn btn-primary">+ Nuevo Proceso</a>
+    <button class="btn btn-primary" onclick="abrirModalNuevoProceso()">+ Nuevo Proceso</button>
 </div>
 
 <div class="table-container">
     <div class="table-header">
-        <h3>Procesos Registrados</h3>
+        <h3>Procesos Registrados (@Model.Count)</h3>
     </div>
     <table class="table">
         <thead>
             <tr>
+               <!-- <th>ID</th> -->
                 <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
+                <th>Fecha Creación</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var proceso in Model)
+            @if (Model.Count > 0)
+            {
+                @foreach (var proceso in Model)
+                {
+                    <tr>
+                        <!-- <td><strong>#@proceso.Id</strong></td> -->
+                        <td>@proceso.Nombre</td>
+                        <td>@proceso.FechaCreacion.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>
+                            @{
+                                var estatusClass = proceso.IdEstatus switch
+                                {
+                                    1 => "badge-success",  // Activo
+                                    2 => "badge-danger",   // Eliminado
+                                    3 => "badge-warning",  // Terminado
+                                    _ => "badge-secondary"
+                                };
+                                var estatusTexto = proceso.IdEstatus switch
+                                {
+                                    1 => "Activo",
+                                    2 => "Eliminado",
+                                    3 => "Terminado",
+                                    _ => "Desconocido"
+                                };
+                            }
+                            <span class="badge @estatusClass">@estatusTexto</span>
+                        </td>
+                        <td>
+                            <a href="/ProcesoElectoral/Details/@proceso.Id" class="btn btn-sm btn-info">Ver</a>
+                            <button class="btn btn-sm btn-warning" onclick="editarProceso(@proceso.Id, '@proceso.Nombre')">Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarProceso(@proceso.Id)">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td><strong>@proceso.Nombre</strong></td>
-                    <td>@proceso.Descripcion</td>
-                    <td>@proceso.FechaInicio.ToString("dd MMM yyyy")</td>
-                    <td>@proceso.FechaFin.ToString("dd MMM yyyy")</td>
-                    <td>
-                        <a href="/ProcesoElectoral/Details/@proceso.Id" class="btn btn-sm btn-info">Ver</a>
-                        <a href="/ProcesoElectoral/Edit/@proceso.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <td colspan="5" style="text-align: center; color: #999; padding: 2rem;">
+                        No hay procesos registrados. <a href="#" onclick="abrirModalNuevoProceso()">Crear uno ahora</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<!-- MODAL: Crear Nuevo Proceso -->
+<div id="modalNuevoProceso" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nuevo Proceso Electoral</h2>
+            <button class="modal-close" onclick="cerrarModalNuevoProceso()">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="formNuevoProceso">
+                <div class="form-group">
+                    <label for="nombreProceso">Nombre del Proceso:</label>
+                    <input 
+                        type="text" 
+                        id="nombreProceso" 
+                        name="nombre" 
+                        placeholder="Ej: Elección Presidencial 2024"
+                        required 
+                        class="form-control">
+                    <small style="color: #999;">Máximo 255 caracteres</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="cerrarModalNuevoProceso()">Cancelar</button>
+            <button class="btn btn-primary" onclick="guardarNuevoProceso()">Crear Proceso</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL OVERLAY -->
+<div id="modalOverlay" class="modal-overlay" style="display: none;" onclick="cerrarModalNuevoProceso()"></div>
+
+<!-- JavaScript para Modal -->
+<script src="~/js/procesos-modal.js"></script>

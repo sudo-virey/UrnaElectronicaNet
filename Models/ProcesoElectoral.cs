@@ -3,32 +3,34 @@ using System.ComponentModel.DataAnnotations;
 namespace UrnaElectronica.Models
 {
     /// <summary>
-    /// Modelo de proceso electoral
+    /// Modelo de proceso electoral - almacena procesos electorales
+    /// Campos: id_proceso, Nombre, Fecha de creación, id_estatus
     /// </summary>
     public class ProcesoElectoral
     {
-        public int Id { get; set; }
+        [Key]
+        public int Id { get; set; }  // id_proceso
         
-        [Required]
-        [StringLength(255)]
+        [Required(ErrorMessage = "El nombre es requerido")]
+        [StringLength(255, ErrorMessage = "El nombre no puede exceder 255 caracteres")]
         public string Nombre { get; set; } = string.Empty;
         
-        [Required]
-        [StringLength(500)]
-        public string Descripcion { get; set; } = string.Empty;
+        [Display(Name = "Fecha de Creación")]
+        public DateTime FechaCreacion { get; set; } = DateTime.Now;
         
-        [Required]
-        public DateTime FechaInicio { get; set; }
-        
-        [Required]
-        public DateTime FechaFin { get; set; }
-        
-        [Required]
-        [StringLength(50)]
-        public string Estado { get; set; } = "Pendiente"; // Pendiente, En Proceso, Completado
+        [Display(Name = "Estado")]
+        public int IdEstatus { get; set; } = 1; // 1=Activo, 2=Eliminado, 3=Terminado
         
         public List<Candidato> Candidatos { get; set; } = new List<Candidato>();
-        
-        public DateTime FechaCreacion { get; set; } = DateTime.Now;
+    }
+    
+    /// <summary>
+    /// Estados posibles de un proceso electoral
+    /// </summary>
+    public enum EstatusProcesoElectoral
+    {
+        Activo = 1,
+        Eliminado = 2,
+        Terminado = 3
     }
 }

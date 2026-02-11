@@ -9,31 +9,36 @@ namespace UrnaElectronica.Controllers
     public class ProcesoElectoralController : BaseController
     {
         /// <summary>
-        /// Listar todos los procesos electorales
+        /// Listar todos los procesos electorales activos
         /// </summary>
         public IActionResult Index()
         {
             if (!VerificarAutenticacion())
                 return RedirectToAction("Login", "Auth");
 
-            // Datos de ejemplo
+            // Datos de ejemplo usando el nuevo modelo simplificado
             var procesos = new List<ProcesoElectoral>
             {
                 new ProcesoElectoral 
                 { 
                     Id = 1, 
                     Nombre = "Elección Estudiantil 2023",
-                    Descripcion = "Elección para directiva estudiantil",
-                    FechaInicio = DateTime.Now.AddDays(-30),
-                    FechaFin = DateTime.Now.AddDays(30)
+                    FechaCreacion = DateTime.Now.AddDays(-30),
+                    IdEstatus = 1
                 },
                 new ProcesoElectoral 
                 { 
                     Id = 2, 
                     Nombre = "Consejo Universitario 2024",
-                    Descripcion = "Elección del consejo universitario",
-                    FechaInicio = DateTime.Now,
-                    FechaFin = DateTime.Now.AddDays(60)
+                    FechaCreacion = DateTime.Now,
+                    IdEstatus = 1
+                },
+                new ProcesoElectoral 
+                { 
+                    Id = 3, 
+                    Nombre = "Junta Directiva 2022",
+                    FechaCreacion = DateTime.Now.AddDays(-365),
+                    IdEstatus = 3 // Terminado
                 }
             };
 
@@ -52,17 +57,17 @@ namespace UrnaElectronica.Controllers
             { 
                 Id = id,
                 Nombre = "Elección Estudiantil 2023",
-                Descripcion = "Elección para directiva estudiantil",
-                FechaInicio = DateTime.Now.AddDays(-30),
-                FechaFin = DateTime.Now.AddDays(30)
+                FechaCreacion = DateTime.Now.AddDays(-30),
+                IdEstatus = 1
             };
 
             return View(proceso);
         }
 
         /// <summary>
-        /// Crear nuevo proceso electoral
+        /// Crear nuevo proceso electoral (GET - para formularios tradicionales)
         /// </summary>
+        [HttpGet]
         public IActionResult Create()
         {
             if (!VerificarAutenticacion())
@@ -72,21 +77,54 @@ namespace UrnaElectronica.Controllers
         }
 
         /// <summary>
-        /// Guardar nuevo proceso electoral
+        /// Guardar nuevo proceso electoral (POST JSON)
         /// </summary>
         [HttpPost]
-        public IActionResult Create(ProcesoElectoral modelo)
+        public IActionResult CreateProceso([FromBody] ProcesoElectoral modelo)
         {
             if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+                return Unauthorized();
 
-            if (ModelState.IsValid)
+            // Validar que el nombre no esté vacío
+            if (string.IsNullOrWhiteSpace(modelo.Nombre))
             {
-                // TODO: Guardar en la base de datos
-                return RedirectToAction(nameof(Index));
+                return Json(new { 
+                    success = false, 
+                    message = "El nombre del proceso es requerido" 
+                });
             }
 
-            return View(modelo);
+            // Crear nuevo proceso con id_estatus = 1 (Activo)
+            var nuevoProcesoId = new Random().Next(100, 999); // Simulando ID auto-generado
+            var nuevosProceso = new ProcesoElectoral
+            {
+                Id = nuevoProcesoId,
+                Nombre = modelo.Nombre.Trim(),
+                FechaCreacion = DateTime.Now,
+                IdEstatus = (int)EstatusProcesoElectoral.Activo
+            };
+
+            // TODO: Guardar en base de datos
+
+            return Json(new { 
+                success = true, 
+                message = "Proceso creado exitosamente",
+                data = nuevosProceso
+            });
+        }
+
+        /// <summary>
+        /// Obtener estado en texto
+        /// </summary>
+        public string ObtenerEstatusTexto(int idEstatus)
+        {
+            return idEstatus switch
+            {
+                1 => "Activo",
+                2 => "Eliminado",
+                3 => "Terminado",
+                _ => "Desconocido"
+            };
         }
     }
 }
