@@ -1,5 +1,6 @@
 using UrnaElectronica.Services;
 using UrnaElectronica.Data;
+using UrnaElectronica.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,9 @@ app.UseRouting();
 
 // Usar sesiones
 app.UseSession();
+
+// Registrar middleware de autenticación
+app.UseMiddleware<AutenticacionMiddleware>();
 
 app.UseAuthorization();
 
