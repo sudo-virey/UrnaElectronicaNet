@@ -1,0 +1,206 @@
+/**
+ * ESTILOS LOGIN - URNA ELECTRÓNICA
+ * Optimizado para alineación en tablets y escalado proporcional
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100dvh; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #FFFFFF 0%, #f4c54237 100%);
+    background-attachment: fixed; 
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden; 
+    position: relative;
+}
+
+/* Fondo animado sutil */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: float 20s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: clamp(1.5rem, 4vh, 2.5rem);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 380px; /* Evita que crezca demasiado en monitores grandes */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 10;
+    margin: auto;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-icon img {
+    width: clamp(70px, 12vh, 90px);
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.login-header h1 {
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+    color: #C1272D;
+    font-weight: 700;
+}
+
+/* Campos de Formulario */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #f4c542;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(244, 197, 66, 0.2);
+}
+
+/* Grupo de Password con Ojo */
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Agrega o actualiza esto en tu login.css */
+.toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #B19012; /* Color dorado del IETAM para que resalte */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    z-index: 11; /* Asegura que esté por encima del input */
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor; /* Esto tomará el color #B19012 */
+}
+
+/* Alineación del Checkbox Recuérdame */
+.options-group {
+    margin-top: -0.2rem; /* Compacta el espacio con el password */
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.remember-me-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre check y texto */
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.remember-me-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #B19012; /* Color institucional Tamaulipas */
+    cursor: pointer;
+}
+
+.remember-me-container span {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Botón Iniciar Sesión */
+.btn-login {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #F4C542 0%, #FFD966 100%); 
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(244, 197, 66, 0.3);
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 197, 66, 0.4);
+}
+
+/* Footer Institucional */
+.app-footer {
+    padding: 1.5rem;
+    text-align: center;
+    color: #888;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+/* Mensajes de Error */
+.error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    border-left: 4px solid #b91c1c;
+}

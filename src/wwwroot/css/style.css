@@ -490,31 +490,34 @@ body {
 /* Badges */
 .badge {
     display: inline-block;
-    padding: 0.4rem 0.85rem;
-    border-radius: 24px;
-    font-size: 0.5rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.3px;
 }
 
 .badge-success {
     background: #eefcf0;
     color: #1a5c2a;
+    font-size: 0.7rem;
 }
 
 .badge-warning {
     background: #fffbec;
     color: #8b6c1f;
+    font-size: 0.7rem;
 }
 
 .badge-danger {
     background: #fee8eb;
     color: #a91844;
+    font-size: 0.7rem;
 }
 
 .badge-primary {
     background: #eef5ff;
     color: #0054b3;
+    font-size: 0.7rem;
 }
 
 /**
@@ -1046,7 +1049,7 @@ footer {
     display: inline-block;
     padding: 0.35rem 0.65rem;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 500;
 }
 
@@ -1066,7 +1069,7 @@ footer {
     background-color: rgba(255, 255, 255, 0.3);
     padding: 0.35rem 0.65rem;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
     display: inline-block;
 }
@@ -1074,16 +1077,19 @@ footer {
 .badge-danger {
     background-color: #dc3545;
     color: white;
+    font-size: 0.7rem;
 }
 
 .badge-warning {
     background-color: #ffc107;
     color: #333;
+    font-size: 0.7rem;
 }
 
 .badge-info {
     background-color: #17a2b8;
     color: white;
+    font-size: 0.7rem;
 }
 
 /* Alerts */
