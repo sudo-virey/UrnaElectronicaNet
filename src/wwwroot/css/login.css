@@ -113,25 +113,29 @@ body::before {
     align-items: center;
 }
 
-/* Agrega o actualiza esto en tu login.css */
 .toggle-password {
     position: absolute;
     right: 0.75rem;
-    background: transparent;
+    background: none;
     border: none;
     cursor: pointer;
-    color: #B19012; /* Color dorado del IETAM para que resalte */
+    /* Cambiamos el color para que coincida con el borde #e0e0e0 o un gris similar */
+    color: #999; 
     display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0.5rem;
-    z-index: 11; /* Asegura que esté por encima del input */
+    transition: color 0.3s ease;
 }
 
-.toggle-password svg {
+.toggle-password:hover {
+    /* Un pequeño cambio al pasar el mouse para que el usuario sepa que es clicable */
+    color: #666; 
+}
+
+.eye-icon, .eye-off-icon {
     width: 20px;
     height: 20px;
-    stroke: currentColor; /* Esto tomará el color #B19012 */
+    /* Aseguramos que el trazo use el color definido arriba */
+    stroke: currentColor; 
 }
 
 /* Alineación del Checkbox Recuérdame */
