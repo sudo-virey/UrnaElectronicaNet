@@ -104,23 +104,29 @@ html, body {
 
 .top-header {
     background: #ffffff;
-    padding: 0 2rem;
+    padding: 0 1rem;
     height: var(--header-height);
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
     
-    /* BLOQUEO AL TOP - Prioridad Absoluta */
-    position: sticky !important;
+    /* BLOQUEO AL TOP - MODO FIXED */
+    position: fixed !important; /* Cambiamos a fixed para máxima compatibilidad */
     top: 0;
-    z-index: 900; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08); /* Sombra para notar el scroll */
+    right: 0;
+    /* El ancho debe ser el total menos el sidebar en PC */
+    width: calc(100% - var(--sidebar-width)); 
+    z-index: 990; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: width 0.3s ease;
 }
 
+/* Ajuste necesario para que el contenido no se meta debajo del header fijo */
 .content-area { 
     padding: 2rem;
     width: 100%; 
+    margin-top: var(--header-height); /* Empujamos el contenido hacia abajo */
 }
 
 /* COMPONENTES DE CONTENIDO */
@@ -219,6 +225,12 @@ html, body {
 
 /* MEDIA QUERY: Ahora incluye Tablets (hasta 1024px) */
 @media (max-width: 1024px) {
+
+    .top-header {
+        width: 100%; /* En tablets y móviles ocupa todo el ancho */
+        left: 0;
+    }
+    
     .mobile-menu-btn {
         display: block; /* La hamburguesa aparece en tablets también */
     }
