@@ -328,6 +328,32 @@ html, body {
 }
 
 .page-header p {
+    color: var(--text-light) !important; /* Asegura el gris legible #666 */
     font-size: 0.95rem;
-    color: var(--text-light);
+}
+
+/* Estilo unificado para botones de acción en modales */
+.btn-save-modal {
+    background-color: var(--primary-color);
+    color: white !important;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-save-modal:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-cancel-modal {
+    background-color: #eee;
+    color: var(--text-dark) !important;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 0.5rem;
 }
