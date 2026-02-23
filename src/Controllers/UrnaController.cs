@@ -1,80 +1,91 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UrnaElectronica.Data;
+using UrnaElectronica.Models;
 
 namespace UrnaElectronica.Controllers
 {
-    /// <summary>
-    /// Controlador para gestionar urnas electrónicas
-    /// </summary>
-    public class UrnaController : BaseController
+    public class UrnaController : Controller
     {
-        /// <summary>
-        /// Listar todas las urnas
-        /// </summary>
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public UrnaController(ApplicationDbContext context)
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+            _context = context;
+        }
 
-            // Datos de ejemplo
-            var urnas = new List<dynamic>
-            {
-                new { Id = 1, Codigo = "URN-001", Estado = "Operativa", UbicacionFisica = "Aula A-101", VersionSoftware = "2.1.0" },
-                new { Id = 2, Codigo = "URN-002", Estado = "Operativa", UbicacionFisica = "Aula A-102", VersionSoftware = "2.1.0" },
-                new { Id = 3, Codigo = "URN-003", Estado = "Mantenimiento", UbicacionFisica = "Aula B-201", VersionSoftware = "2.0.5" },
-                new { Id = 4, Codigo = "URN-004", Estado = "Operativa", UbicacionFisica = "Aula B-202", VersionSoftware = "2.1.0" }
-            };
-
+        // Listado principal
+        public async Task<IActionResult> Index()
+        {
+            var urnas = await _context.Urnas.Where(u => !u.Eliminado).ToListAsync();
+            
             ViewBag.TotalUrnas = urnas.Count;
-            ViewBag.Operativas = urnas.Count(u => u.Estado == "Operativa");
-            ViewBag.EnMantenimiento = urnas.Count(u => u.Estado == "Mantenimiento");
+            ViewBag.Operativas = urnas.Count(u => u.Activo);
+            ViewBag.EnMantenimiento = urnas.Count(u => !u.Activo);
 
             return View(urnas);
         }
 
-        /// <summary>
-        /// Ver detalles técnicos de una urna
-        /// </summary>
-        public IActionResult Details(int id)
-        {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
-            var urna = new 
-            { 
-                Id = id,
-                Codigo = $"URN-{id:D3}",
-                Estado = "Operativa",
-                UbicacionFisica = "Aula A-101",
-                VersionSoftware = "2.1.0",
-                FechaUltimaVerificacion = DateTime.Now.AddDays(-5),
-                CertificadoDigital = "Válido hasta 2025-12-31"
-            };
-
-            return View(urna);
-        }
-
-        /// <summary>
-        /// Formulario para registrar nueva urna
-        /// </summary>
+        // GET: Create (Modal)
         public IActionResult Create()
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
-            return View();
+            return PartialView();
         }
 
-        /// <summary>
-        /// Guardar nueva urna
-        /// </summary>
         [HttpPost]
-        public IActionResult Create(IFormCollection form)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Urna urna)
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+            if (ModelState.IsValid)
+            {
+                urna.Eliminado = false;
+                _context.Add(urna);
+                await _context.SaveChangesAsync();
+                Response.Headers.Add("HX-Refresh", "true");
+                return Ok();
+            }
+            return PartialView(urna);
+        }
 
-            // TODO: Validar y guardar en BD
-            return RedirectToAction(nameof(Index));
+        // GET: Edit (Modal)
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+            var urna = await _context.Urnas.FindAsync(id);
+            if (urna == null || urna.Eliminado) return NotFound();
+            return PartialView(urna);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Urna urna)
+        {
+            if (id != urna.Id_Urna) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(urna);
+                await _context.SaveChangesAsync();
+                Response.Headers.Add("HX-Refresh", "true");
+                return Ok();
+            }
+            return PartialView(urna);
+        }
+
+        // POST: Delete (Lógico)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var urna = await _context.Urnas.FindAsync(id);
+            if (urna == null) return NotFound();
+
+            urna.Eliminado = true;
+            _context.Update(urna);
+            await _context.SaveChangesAsync();
+
+            Response.Headers.Add("HX-Refresh", "true");
+            return Ok();
         }
     }
 }
