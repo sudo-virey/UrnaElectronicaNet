@@ -1,82 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UrnaElectronica.Data; // Para encontrar tu ApplicationDbContext
+using UrnaElectronica.Models; // Para encontrar tu clase Partido
 
 namespace UrnaElectronica.Controllers
 {
-    /// <summary>
-    /// Controlador para gestionar entidades políticas (partidos, listas, candidatos)
-    /// </summary>
-    public class EntidadPoliticaController : BaseController
+    public class EntidadPoliticaController : Controller
     {
-        /// <summary>
-        /// Listar todas las entidades políticas
-        /// </summary>
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public EntidadPoliticaController(ApplicationDbContext context)
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
-            // Datos de ejemplo
-            var entidades = new List<dynamic>
-            {
-                new { Id = 1, Nombre = "Partido Democrático", Siglas = "PD", Tipo = "Partido", CandidatosRegistrados = 45, Estado = "Activo" },
-                new { Id = 2, Nombre = "Movimiento Ciudadano", Siglas = "MC", Tipo = "Movimiento", CandidatosRegistrados = 38, Estado = "Activo" },
-                new { Id = 3, Nombre = "Unidad Popular", Siglas = "UP", Tipo = "Coalición", CandidatosRegistrados = 62, Estado = "Activo" },
-                new { Id = 4, Nombre = "Independientes", Siglas = "IND", Tipo = "Independientes", CandidatosRegistrados = 12, Estado = "Activo" }
-            };
-
-            ViewBag.TotalEntidades = entidades.Count;
-            ViewBag.TotalCandidatos = entidades.Sum(e => e.CandidatosRegistrados);
-
-            return View(entidades);
+            _context = context;
         }
 
-        /// <summary>
-        /// Ver detalles de una entidad política
-        /// </summary>
-        public IActionResult Details(int id)
+        // 1. VISTA PRINCIPAL: Lista todos los partidos
+        public async Task<IActionResult> Index()
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+            var partidos = await _context.Partidos
+                .Where(p => !p.Eliminado)
+                .ToListAsync();
 
-            var entidad = new 
-            { 
-                Id = id,
-                Nombre = "Partido Democrático",
-                Siglas = "PD",
-                Tipo = "Partido",
-                Representante = "Dr. Juan García López",
-                Email = "contacto@partidodem.ec",
-                Teléfono = "+593-2-1234567",
-                CandidatosRegistrados = 45,
-                FechaRegistro = DateTime.Now.AddDays(-45),
-                Estado = "Activo"
-            };
+            ViewBag.TotalEntidades = partidos.Count;
+            ViewBag.TotalCandidatos = 0; // Por ahora 0 ya que la base está vacía
 
-            return View(entidad);
+            return View(partidos);
         }
 
-        /// <summary>
-        /// Registrar nueva entidad política
-        /// </summary>
+        // 2. FORMULARIO: Muestra la página para escribir los datos (GET)
         public IActionResult Create()
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
             return View();
         }
 
-        /// <summary>
-        /// Guardar nueva entidad política
-        /// </summary>
+        // 3. GUARDAR: Recibe los datos del formulario y los mete a la DB (POST)
         [HttpPost]
-        public IActionResult Create(IFormCollection form)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Partido partido)
         {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
-            // TODO: Validar y guardar en BD
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                partido.Eliminado = false; // Nos aseguramos que el registro esté activo
+                _context.Add(partido);
+                await _context.SaveChangesAsync(); // <--- Aquí ocurre la magia en SQL
+                
+                return RedirectToAction(nameof(Index)); // Al terminar, regresa a la tabla
+            }
+            return View(partido);
         }
     }
 }
