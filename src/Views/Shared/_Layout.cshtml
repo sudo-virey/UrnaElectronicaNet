@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - Urna Electrónica</title>
     <link rel="icon" type="image/png" href="~/images/icon.png">
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="~/css/style.css" rel="stylesheet" />
     <link href="~/css/layout-components.css" rel="stylesheet" />
     
@@ -36,7 +38,6 @@
                     <li><a href="/EntidadPolitica" class="nav-item"><i class="fas fa-landmark"></i> <span class="nav-label">Partidos</span></a></li>
                 </ul>
             </nav>
-    
         </aside>
 
         <div class="main-content">
@@ -72,16 +73,17 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         function toggleMobileMenu() {
             document.getElementById('main-sidebar').classList.toggle('mobile-active');
             document.getElementById('sidebar-overlay').classList.toggle('active');
         }
     </script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    @* ESTA ES LA LÍNEA QUE FALTA *@
+    @* Esta línea renderiza el script openEntidadModal de tu Index *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
