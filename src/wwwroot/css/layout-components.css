@@ -3,16 +3,6 @@
  * Estilos para Header, Perfil de Usuario y Logout
  */
 
-.top-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem 2rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    height: var(--header-height, 70px);
-}
 
 .user-profile-header {
     display: flex;
