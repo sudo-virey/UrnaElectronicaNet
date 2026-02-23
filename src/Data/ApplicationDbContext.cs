@@ -12,6 +12,8 @@ namespace UrnaElectronica.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
 
+        public DbSet<Partido> Partidos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
