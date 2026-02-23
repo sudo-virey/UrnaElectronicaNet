@@ -18,6 +18,8 @@ namespace UrnaElectronica.Data
 
         public DbSet<Urna> Urnas { get; set; }
 
+        public DbSet<Acceso> Accesos { get; set; }
+
       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,10 +32,12 @@ namespace UrnaElectronica.Data
             modelBuilder.Entity<Partido>().ToTable("Partidos"); 
             modelBuilder.Entity<Impresora>().ToTable("Impresoras");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+            modelBuilder.Entity<Acceso>().ToTable("Accesos");
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Impresora>().HasIndex(i => i.Mac).IsUnique();
             modelBuilder.Entity<Urna>().HasIndex(u => u.Nombre).IsUnique();
+            modelBuilder.Entity<Acceso>().HasIndex(a => a.Codigo).IsUnique();
         }
     }
 }
