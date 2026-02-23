@@ -65,8 +65,23 @@ namespace UrnaElectronica.Controllers
                 
                 Response.Headers.Add("HX-Refresh", "true");
                 return Ok();
-            }
+            }   
             return PartialView(partido);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var partido = await _context.Partidos.FindAsync(id);
+            if (partido == null) return NotFound();
+
+            partido.Eliminado = true; 
+            _context.Update(partido);
+            await _context.SaveChangesAsync();
+
+            Response.Headers.Add("HX-Refresh", "true");
+            return Ok();
         }
     }
 }
