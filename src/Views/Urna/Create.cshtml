@@ -1,0 +1,47 @@
+@model UrnaElectronica.Models.Urna
+@{ Layout = null; }
+
+<div id="modal-backdrop" class="custom-modal-backdrop">
+    <div class="custom-modal-content">
+        <h3 style="margin-top: 0; color: #333;">Registrar Nueva Urna</h3>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;" />
+        
+        <form hx-post="/Urna/Create" hx-target="#modal-container">
+            @Html.AntiForgeryToken()
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Nombre / Código de Identificación</label>
+                <input asp-for="Nombre" class="form-control" 
+                       style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;"
+                       required placeholder="Ej: URNA-TAM-01" />
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Modelo del Dispositivo</label>
+                <input asp-for="Modelo" class="form-control" 
+                       style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;"
+                       placeholder="Ej: Model X-2026" required />
+            </div>
+
+            <div style="margin-bottom: 2rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #eee;">
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; margin-bottom: 0.3rem;">
+                    <input type="checkbox" asp-for="Activo" style="width: 18px; height: 18px; cursor: pointer;" checked />
+                    <span>¿Equipo listo para operación?</span>
+                </label>
+                <p style="margin: 0 0 0 30px; font-size: 0.85rem; color: #666; line-height: 1.2;">
+                    Al estar activa, podrá ser seleccionada en la configuración de procesos electorales.
+                </p>
+            </div>
+
+            <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" 
+                        onclick="document.getElementById('modal-container').innerHTML=''" 
+                        class="btn-cancel-modal">Cancelar</button> 
+                <button type="submit" 
+                        class="btn-save-modal">
+                    Guardar Urna
+                </button> 
+            </div>
+        </form>
+    </div>
+</div>
