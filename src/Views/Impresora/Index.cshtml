@@ -1,109 +1,60 @@
+@model IEnumerable<UrnaElectronica.Models.Impresora>
 @{
     ViewData["Title"] = "Impresoras de Auditoría";
 }
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
-<div class="page-header">
+<div class="page-header" style="margin-bottom: 2rem;">
     <h1>Impresoras de Auditoría</h1>
-    <p class="subtitle">Gestión de periféricos para impresión de comprobantes</p>
+    <p>Gestión y configuración de equipos de impresión para máquinas de votación.</p>
 </div>
 
-<!-- Estadísticas -->
-<div class="dashboard-grid">
-    <div class="stat-card">
-        <div class="stat-header">
-            <div>
-                <p class="stat-label">Total Impresoras</p>
-                <div class="stat-value">@ViewBag.TotalImpresoras</div>
-            </div>
-            <div class="stat-icon">🖨️</div>
-        </div>
-        <div class="stat-change positive">Todas registradas</div>
-    </div>
-
-    <div class="stat-card" style="border-left-color: #28a745;">
-        <div class="stat-header">
-            <div>
-                <p class="stat-label">Operativas</p>
-                <div class="stat-value">@ViewBag.Operativas</div>
-            </div>
-            <div class="stat-icon">✅</div>
-        </div>
-        <div class="stat-change positive">@((ViewBag.Operativas * 100 / ViewBag.TotalImpresoras).ToString("F0"))% funcionales</div>
-    </div>
-
-    <div class="stat-card" style="border-left-color: #dc3545;">
-        <div class="stat-header">
-            <div>
-                <p class="stat-label">Con Problemas</p>
-                <div class="stat-value">@ViewBag.ConProblemas</div>
-            </div>
-            <div class="stat-icon">⚠️</div>
-        </div>
-        <div class="stat-change negative">Requieren atención</div>
-    </div>
-</div>
-
-<div style="margin-bottom: 2rem;">
-    <a href="/Impresora/Create" class="btn btn-primary">+ Registrar Impresora</a>
+<div style="margin: 2rem 0;">
+    <button hx-get="/Impresora/Create" hx-target="#modal-container" class="btn-primary-action" style="border:none; cursor:pointer;">
+        <i class="fas fa-plus"></i> Registrar Impresora
+    </button>
 </div>
 
 <div class="table-container">
-    <div class="table-header">
-        <h3>Impresoras Disponibles</h3>
-    </div>
     <table class="table">
         <thead>
             <tr>
-                <th>Código</th>
-                <th>Modelo</th>
+                <th>Identificador</th>
+                <th>MAC</th>
                 <th>Estado</th>
-                <th>Ubicación</th>
-                <th>Papel</th>
-                <th>Acciones</th>
+                <th style="text-align: right;">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @{
-                var impresorasList = new List<dynamic>
-                {
-                    new { Id = 1, Codigo = "IMP-001", Modelo = "HP LaserJet Pro", Estado = "Operativa", Ubicacion = "Centro 1", Paper = "Suficiente" },
-                    new { Id = 2, Codigo = "IMP-002", Modelo = "Canon imagePROGRAF", Estado = "Operativa", Ubicacion = "Centro 1", Paper = "Suficiente" },
-                    new { Id = 3, Codigo = "IMP-003", Modelo = "Ricoh MP C3004", Estado = "Bajo Papel", Ubicacion = "Centro 2", Paper = "Crítico" },
-                    new { Id = 4, Codigo = "IMP-004", Modelo = "Brother HL-L8360", Estado = "Inactiva", Ubicacion = "Almacén", Paper = "N/A" }
-                };
-            }
-            @foreach (var impresora in impresorasList)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td><strong>@impresora.Codigo</strong></td>
-                    <td>@impresora.Modelo</td>
+                    <td><strong>@item.Nombre</strong></td>
+                    <td><code>@item.Mac</code></td>
                     <td>
-                        @if (impresora.Estado == "Operativa")
-                        {
-                            <span class="badge badge-success">@impresora.Estado</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-warning">@impresora.Estado</span>
-                        }
+                        <span class="badge @(item.Activo ? "badge-success" : "badge-secondary")">
+                            @(item.Activo ? "ACTIVA" : "INACTIVA")
+                        </span>
                     </td>
-                    <td>@impresora.Ubicacion</td>
-                    <td>
-                        @if (impresora.Paper == "Crítico")
-                        {
-                            <span class="badge badge-danger">@impresora.Paper</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-success">@impresora.Paper</span>
-                        }
-                    </td>
-                    <td>
-                        <a href="/Impresora/Details/@impresora.Id" class="btn btn-sm btn-info">Ver</a>
-                        <a href="/Impresora/Mantenimiento/@impresora.Id" class="btn btn-sm btn-warning">Mantenimiento</a>
+                    <td style="text-align: right;">
+                        <button hx-get="/Impresora/Edit/@item.Id_Impresora" 
+                                hx-target="#modal-container" 
+                                class="btn-icon" 
+                                style="background:none; border:none; cursor:pointer;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button hx-post="/Impresora/Delete/@item.Id_Impresora"
+                                hx-confirm="¿Deseas dar de baja esta impresora del catálogo?"
+                                hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
+                                class="btn-icon" 
+                                style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<div id="modal-container"></div>
