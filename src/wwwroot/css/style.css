@@ -357,3 +357,41 @@ html, body {
     cursor: pointer;
     margin-right: 0.5rem;
 }
+
+
+/* Contenedor del interruptor de estado */
+.form-status-container {
+    margin-bottom: 2rem;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px dashed var(--border-color);
+}
+
+.form-check-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.form-check-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary-color);
+}
+
+.form-help-text {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    margin-left: 32px;
+}
+
+/* Clases auxiliares para el modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.modal-card { background: white; padding: 2rem; border-radius: 12px; width: 520px; max-width: 95%; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+.form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark); }

@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Entidades Políticas";
 }
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 <div class="page-header" style="margin-bottom: 2rem;">
     <h1>Entidades Políticas</h1>
@@ -53,13 +54,20 @@
                             <span class="badge badge-secondary" style="background-color: #e2e3e5; color: #383d41; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.75rem;">INACTIVO</span>
                         }
                     </td>
-                   <td style="text-align: right;">
+                    <td style="text-align: right;">
                         <button hx-get="/EntidadPolitica/Edit/@partido.Id_Partido" 
                                 hx-target="#modal-container" 
                                 class="btn-icon" 
                                 style="background:none; border:none; cursor:pointer;">
                             <i class="fas fa-edit"></i>
                         </button>
+                       <button hx-post="/EntidadPolitica/Delete/@partido.Id_Partido"
+                            hx-confirm="¿Estás seguro de que deseas eliminar esta entidad? Esta acción no se puede deshacer."
+                            hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
+                            class="btn-icon" 
+                            style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                     </td>
                 </tr>
             }
