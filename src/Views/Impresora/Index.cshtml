@@ -32,9 +32,15 @@
                     <td><strong>@item.Nombre</strong></td>
                     <td><code>@item.Mac</code></td>
                     <td>
-                        <span class="badge @(item.Activo ? "badge-success" : "badge-secondary")">
-                            @(item.Activo ? "ACTIVA" : "INACTIVA")
-                        </span>
+                          @if (item.Activo)
+                        {
+                            @* Cambia 'badge-success' por 'badge-activo' si usas tus estilos personalizados *@
+                            <span class="badge badge-success" style="background-color: #d4edda; color: #155724; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.75rem;">ACTIVO</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-secondary" style="background-color: #e2e3e5; color: #383d41; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.75rem;">INACTIVO</span>
+                        }
                     </td>
                     <td style="text-align: right;">
                         <button hx-get="/Impresora/Edit/@item.Id_Impresora" 
