@@ -1,0 +1,55 @@
+@model UrnaElectronica.Models.Partido
+
+@{
+    ViewData["Title"] = "Registrar Entidad";
+}
+
+<div class="page-header" style="margin-bottom: 2rem;">
+    <h1 style="color: var(--primary-dark);">Registrar Nueva Entidad</h1>
+    <p class="text-light">Completa los campos para dar de alta un partido o coalición en el sistema.</p>
+</div>
+
+<div class="stat-card" style="max-width: 600px; border-left: 5px solid var(--primary-color); margin-bottom: 2rem;">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre de la Entidad</label>
+            <input asp-for="Nombre" class="form-control" placeholder="Ej. Partido de la Innovación" 
+                   style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Siglas</label>
+                <input asp-for="Siglas" class="form-control" placeholder="Ej. PI" 
+                       style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;" />
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Tipo de Entidad</label>
+                <select asp-for="Tipo" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; background: white;">
+                    <option value="Partido">Partido</option>
+                    <option value="Coalición">Coalición</option>
+                    <option value="Movimiento">Movimiento</option>
+                    <option value="Independiente">Independiente</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input asp-for="Estado" type="checkbox" checked /> 
+                <span>¿Entidad actualmente activa?</span>
+            </label>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <button type="submit" class="btn-primary-action" style="border: none; cursor: pointer;">
+                <i class="fas fa-save"></i> Guardar Entidad
+            </button>
+            <a href="/EntidadPolitica" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem;">
+                Cancelar y volver
+            </a>
+        </div>
+    </form>
+</div>
