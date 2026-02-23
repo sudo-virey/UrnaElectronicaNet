@@ -1,32 +1,36 @@
 @model UrnaElectronica.Models.Partido
 @{ Layout = null; }
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-    <div style="margin-bottom: 1rem;">
-        <label style="display: block; font-weight: 600; margin-bottom: 0.3rem;">Nombre de la Entidad</label>
-        <input asp-for="Nombre" class="form-control" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;" required />
+<div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; padding: 2rem; border-radius: 12px; width: 500px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <h3 style="margin-top: 0; color: #333;">Registrar Entidad</h3>
+        <hr />
+        
+        <form hx-post="/EntidadPolitica/Create" hx-target="#modal-container">
+            @Html.AntiForgeryToken()
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-weight: 600;">Nombre de la Entidad</label>
+                <input asp-for="Nombre" class="form-control" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;" required />
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-weight: 600;">Siglas</label>
+                    <input asp-for="Siglas" class="form-control" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;" />
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600;">Tipo</label>
+                    <select asp-for="Tipo" class="form-select" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="Partido">Partido</option>
+                        <option value="Coalición">Coalición</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
+                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" style="background: #eee; border: none; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">Cancelar</button>
+                <button type="submit" style="background: #ffc107; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold;">Guardar</button>
+            </div>
+        </form>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-        <div>
-            <label style="display: block; font-weight: 600;">Siglas</label>
-            <input asp-for="Siglas" class="form-control" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;" />
-        </div>
-        <div>
-            <label style="display: block; font-weight: 600;">Tipo</label>
-            <select asp-for="Tipo" class="form-select" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
-                <option value="Partido">Partido</option>
-                <option value="Coalición">Coalición</option>
-            </select>
-        </div>
-    </div>
-    <div style="margin-bottom: 1.5rem;">
-        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-            <input asp-for="Estado" type="checkbox" checked /> ¿Activo?
-        </label>
-    </div>
-    <div style="text-align: right; border-top: 1px solid #eee; padding-top: 1rem;">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-right: 0.5rem; background: #eee; border: none; padding: 0.6rem 1rem; border-radius: 6px;">Cancelar</button>
-        <button type="submit" class="btn-primary-action" style="border: none; cursor: pointer; padding: 0.6rem 1.5rem;">Guardar</button>
-    </div>
-</form>
+</div>
