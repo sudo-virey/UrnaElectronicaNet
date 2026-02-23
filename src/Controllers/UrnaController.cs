@@ -156,5 +156,42 @@ namespace UrnaElectronica.Controllers
             // 3. Recargar la lista parcial en el modal usando HTMX
             return RedirectToAction("Accesos", new { id = idUrna });
         }
+
+        [HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> GenerarLote(int idUrna)
+{
+    var urna = await _context.Urnas.FindAsync(idUrna);
+    if (urna == null) return NotFound();
+
+    for (int i = 0; i < 20; i++)
+    {
+        // Generamos un Hash SHA-256 único por cada iteración
+        string rawData = Guid.NewGuid().ToString() + DateTime.Now.Ticks + i;
+        string hashUnico;
+
+        using (SHA256 sha256Hash = SHA256.Create())
+        {
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+            // Tomamos 12 caracteres para que el QR sea legible y seguro
+            hashUnico = BitConverter.ToString(bytes).Replace("-", "").Substring(0, 12);
+        }
+
+        var nuevoAcceso = new Acceso
+        {
+            Id_Urna = idUrna,
+            Codigo = hashUnico,
+            Activo = true,
+            Eliminado = false
+        };
+        _context.Accesos.Add(nuevoAcceso);
+    }
+
+        await _context.SaveChangesAsync();
+
+        // IMPORTANTE: Redirigimos al método que lista los accesos 
+        // para que HTMX actualice el contenido del modal con los 20 nuevos
+        return RedirectToAction("Accesos", new { id = idUrna });
+    }
     }
 }
