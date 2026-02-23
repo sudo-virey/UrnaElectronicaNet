@@ -1,4 +1,5 @@
-@* Encabezado Dinámico *@
+@model IEnumerable<UrnaElectronica.Models.Partido>
+
 @{
     ViewData["Title"] = "Entidades Políticas";
 }
@@ -16,7 +17,6 @@
             <span style="font-size: 1.5rem;">🏛️</span>
         </div>
     </div>
-    
     <div class="stat-card" style="border-left-color: #17a2b8;">
         <p class="stat-label">Candidatos Registrados</p>
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -27,12 +27,10 @@
 </div>
 
 <div style="margin: 2rem 0;">
-    <a href="/EntidadPolitica/Create" class="btn-primary-action">
+    <button onclick="openEntidadModal('/EntidadPolitica/Create', 'Registrar Nueva Entidad')" class="btn-primary-action" style="border:none; cursor:pointer;">
         <i class="fas fa-plus"></i> Registrar Nueva Entidad
-    </a>
+    </button>
 </div>
-
-@model IEnumerable<UrnaElectronica.Models.Partido>
 
 <div class="table-container">
     <table class="table">
@@ -60,11 +58,63 @@
                         }
                     </td>
                     <td style="text-align: right;">
-                        <a href="/Partidos/Edit/@partido.Id_Partido" class="btn-icon"><i class="fas fa-edit"></i></a>
-                        <a href="/Partidos/Details/@partido.Id_Partido" class="btn-icon"><i class="fas fa-eye"></i></a>
+                        <button onclick="openEntidadModal('/EntidadPolitica/Edit/@partido.Id_Partido', 'Editar Entidad')" class="btn-icon" style="background:none; border:none; cursor:pointer;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <a href="/EntidadPolitica/Details/@partido.Id_Partido" class="btn-icon"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@* ESTRUCTURA DEL MODAL *@
+<div class="modal fade" id="entidadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle" style="color: var(--primary-dark); font-weight: 700;"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="text-center p-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let entidadModal;
+
+        function openEntidadModal(url, title) {
+            const modalEl = document.getElementById('entidadModal');
+            if (!entidadModal) entidadModal = new bootstrap.Modal(modalEl);
+            
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="text-center p-4">
+                    <div class="spinner-border text-warning" role="status"></div>
+                    <p class="mt-2">Cargando formulario...</p>
+                </div>`;
+            
+            entidadModal.show();
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error("Error en la red");
+                    return res.text();
+                })
+                .then(html => { 
+                    document.getElementById('modalBody').innerHTML = html;
+                })
+                .catch(err => { 
+                    document.getElementById('modalBody').innerHTML = '<p class="text-danger">Error al cargar el formulario.</p>';
+                    console.error(err);
+                });
+        }
+    </script>
+}
