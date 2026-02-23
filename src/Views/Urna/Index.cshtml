@@ -46,6 +46,13 @@
                         }
                     </td>
                     <td style="text-align: right;">
+                        <button hx-get="/Urna/Accesos/@item.Id_Urna" 
+                                hx-target="#modal-container" 
+                                class="btn-icon" 
+                                style="margin-left: 10px; background:none; border:none; cursor:pointer;"
+                                title="Ver Accesos">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
                         <button hx-get="/Urna/Edit/@item.Id_Urna" hx-target="#modal-container" class="btn-icon"style="background:none; border:none; cursor:pointer;">
                             <i class="fas fa-edit"></i>
                         </button>
