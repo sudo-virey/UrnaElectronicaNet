@@ -1,12 +1,15 @@
 @model UrnaElectronica.Models.Partido
 @{ Layout = null; }
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id_Partido" />
+
     <div style="margin-bottom: 1rem;">
         <label style="display: block; font-weight: 600; margin-bottom: 0.3rem;">Nombre de la Entidad</label>
         <input asp-for="Nombre" class="form-control" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;" required />
     </div>
+
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
         <div>
             <label style="display: block; font-weight: 600;">Siglas</label>
@@ -14,19 +17,23 @@
         </div>
         <div>
             <label style="display: block; font-weight: 600;">Tipo</label>
-            <select asp-for="Tipo" class="form-select" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
+            <select asp-for="Tipo" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
                 <option value="Partido">Partido</option>
                 <option value="Coalición">Coalición</option>
+                <option value="Movimiento">Movimiento</option>
+                <option value="Independiente">Independiente</option>
             </select>
         </div>
     </div>
+
     <div style="margin-bottom: 1.5rem;">
         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-            <input asp-for="Estado" type="checkbox" checked /> ¿Activo?
+            <input asp-for="Estado" type="checkbox" /> Entidad Activa
         </label>
     </div>
+
     <div style="text-align: right; border-top: 1px solid #eee; padding-top: 1rem;">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-right: 0.5rem; background: #eee; border: none; padding: 0.6rem 1rem; border-radius: 6px;">Cancelar</button>
-        <button type="submit" class="btn-primary-action" style="border: none; cursor: pointer; padding: 0.6rem 1.5rem;">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-right: 0.5rem; background: #eee; border: none; padding: 0.6rem 1rem; border-radius: 6px;">Cerrar</button>
+        <button type="submit" class="btn-primary-action" style="background-color: #ffc107; border: none; color: #000; padding: 0.6rem 1.5rem; cursor:pointer;">Actualizar Cambios</button>
     </div>
 </form>
