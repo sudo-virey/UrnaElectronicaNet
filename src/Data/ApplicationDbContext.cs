@@ -16,6 +16,8 @@ namespace UrnaElectronica.Data
 
         public DbSet<Impresora> Impresoras { get; set; }
 
+        public DbSet<Urna> Urnas { get; set; }
+
       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -24,12 +26,14 @@ namespace UrnaElectronica.Data
             modelBuilder.HasDefaultSchema("UrnaElectronica");
             
             // MAPEO EXPLÍCITO: Asegúrate de que estos nombres sean idénticos a los de SQL
+            modelBuilder.Entity<Urna>().ToTable("Urnas");
             modelBuilder.Entity<Partido>().ToTable("Partidos"); 
             modelBuilder.Entity<Impresora>().ToTable("Impresoras");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Impresora>().HasIndex(i => i.Mac).IsUnique();
+            modelBuilder.Entity<Urna>().HasIndex(u => u.Nombre).IsUnique();
         }
     }
 }
