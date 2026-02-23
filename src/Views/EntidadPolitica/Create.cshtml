@@ -26,10 +26,16 @@
                     </select>
                 </div>
             </div>
-
+            <div class="form-status-container">
+                <label class="form-check-label">
+                    <input type="checkbox" asp-for="Estado" checked />
+                    <span>¿Entidad actualmente activa?</span>
+                </label>
+                <p class="form-help-text">Al estar activa, podrá ser seleccionada en la configuración de procesos electorales.</p>
+            </div>
             <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
-                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" style="background: #eee; border: none; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">Cancelar</button>
-                <button type="submit" style="background: #ffc107; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold;">Guardar</button>
+                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" class="btn-cancel-modal">Cancelar</button>
+                <button type="submit" class="btn-save-modal">Guardar</button>
             </div>
         </form>
     </div>
