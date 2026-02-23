@@ -1,0 +1,74 @@
+/**
+ * LAYOUT COMPONENTS - URNA ELECTRÓNICA
+ * Estilos para Header, Perfil de Usuario y Logout
+ */
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    height: var(--header-height, 70px);
+}
+
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.welcome-text {
+    font-size: 0.9rem;
+    color: var(--text-dark, #333);
+}
+
+.welcome-text strong {
+    color: var(--primary-color, #B19012);
+}
+
+.header-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color, #e0e0e0);
+}
+
+.logout-header-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--primary-dark, #A43603);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.logout-header-btn:hover {
+    background-color: #fcefd4;
+    border-color: #f4c54244;
+}
+
+.logout-header-btn i {
+    font-size: 1rem;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+    .top-header {
+        padding: 0.8rem 1rem;
+    }
+    
+    .logout-label {
+        display: none; /* Solo queda el icono en móvil para ahorrar espacio */
+    }
+    
+    .user-profile-header {
+        gap: 0.8rem;
+    }
+}

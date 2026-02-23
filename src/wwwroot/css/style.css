@@ -1365,4 +1365,49 @@ footer {
     .stat-icon {
         font-size: 1.2rem;
     }
+
+    
+}
+
+/* --- MEJORAS RESPONSIVAS --- */
+
+/* Botón Hamburguesa oculto por defecto */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+/* Overlay para móvil */
+#sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn { display: block; }
+
+    .sidebar {
+        left: -100%; /* Escondido a la izquierda */
+        transition: left 0.3s ease;
+        width: 260px !important; /* Ancho completo al abrir */
+    }
+
+    .sidebar.mobile-active {
+        left: 0;
+    }
+
+    #sidebar-overlay.active { display: block; }
+
+    .main-content { margin-left: 0 !important; }
+
+    .header-right .welcome-text { display: none; }
 }

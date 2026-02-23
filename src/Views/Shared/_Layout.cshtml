@@ -5,113 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Urna Electrónica</title>
     <link rel="icon" type="image/png" href="~/images/icon.png">
-        <link href="~/css/style.css" rel="stylesheet" />
-        <script src="https://unpkg.com/htmx.org"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/layout-components.css" rel="stylesheet" />
+    
+    <script src="https://unpkg.com/htmx.org"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    </head>
-    <body>
-        <div class="app-container">
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="sidebar-header">
-                    <div class="sidebar-logo">
-                        <span class="logo-icon">
-                            <img src="~/images/icon.png" alt="Icono Urna Electrónica" width="80" height="80">
-                            </span>
-                        </div>
+    <div class="app-container">
+        <aside class="sidebar" id="main-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="~/images/icon.png" alt="Logo" width="60" height="60">
+                    <div class="logo-text">
+                        <h2>IETAM</h2>
+                        <p>Urna Electrónica</p>
                     </div>
-
-                    <nav class="sidebar-nav">
-                        <ul>
-                            <li>
-                                <a href="/Home" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span>
-                                    <span class="nav-label">Dashboard</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/ProcesoElectoral" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-vote-yea"></i></span>
-                                    <span class="nav-label">Procesos Electorales</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/Urna" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-box"></i></span>
-                                    <span class="nav-label">Urnas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/Impresora" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-print"></i></span>
-                                    <span class="nav-label">Impresoras</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/EntidadPolitica" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-landmark"></i></span>
-                                    <span class="nav-label">Entidades Políticas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/Reportes" class="nav-item">
-                                    <span class="nav-icon"><i class="fas fa-chart-line"></i></span>
-                                    <span class="nav-label">Reportes</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
-
-                    <div class="sidebar-footer">
-                        @if (Context.Session.GetString("UsuarioEmail") != null)
-                        {
-                            <div class="user-card">
-                                <div class="user-avatar">👤</div>
-                                <div class="user-details">
-                                    <p class="user-name">@Context.Session.GetString("UsuarioNombre")</p>
-                                    <p class="user-email">@Context.Session.GetString("UsuarioEmail")</p>
-                                </div>
-                            </div>
-                            <a href="/Auth/Logout" class="logout-btn">
-                                <span>🚪</span> Cerrar Sesión
-                            </a>
-                        }
-                    </div>
-                </aside>
-
-                <!-- Main Content -->
-                <div class="main-content">
-                    <!-- Top Header -->
-                    <header class="top-header">
-                        <div class="header-left">
-                            <h1 class="page-title">Administración de Urna Electronica</h1>
-                        </div>
-                        <div class="header-right">
-                            <div class="header-icons">
-                                <button class="icon-btn">🔔</button>
-                                <button class="icon-btn">⚙️</button>
-                            </div>
-                            @if (Context.Session.GetString("UsuarioNombre") != null)
-                            {
-                                <span class="welcome-text">Bienvenido, @Context.Session.GetString("UsuarioNombre")</span>
-                            }
-                        </div>
-                    </header>
-
-                    <!-- Content Area (se carga dinámicamente) -->
-                    <main class="content-area" id="content-area">
-                        @RenderBody()
-                    </main>
-
-                    <!-- Footer -->
-                    <footer class="app-footer">
-                        <p>&copy; 2026 IEAM - Instituto Electoral de Administración. Todos los derechos reservados.</p>
-                    </footer>
                 </div>
             </div>
 
-            <script src="~/js/main.js"></script>
-        </body>
-    </html>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/Home" class="nav-item"><i class="fas fa-tachometer-alt"></i> <span class="nav-label">Dashboard</span></a></li>
+                    <li><a href="/ProcesoElectoral" class="nav-item"><i class="fas fa-vote-yea"></i> <span class="nav-label">Procesos</span></a></li>
+                    <li><a href="/Urna" class="nav-item"><i class="fas fa-box"></i> <span class="nav-label">Urnas</span></a></li>
+                    <li><a href="/Impresora" class="nav-item"><i class="fas fa-print"></i> <span class="nav-label">Impresoras</span></a></li>
+                    <li><a href="/EntidadPolitica" class="nav-item"><i class="fas fa-landmark"></i> <span class="nav-label">Partidos</span></a></li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>&copy; 2026 IETAM</p>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="header-right">
+                    @if (Context.Session.GetString("UsuarioNombre") != null)
+                    {
+                        <div class="user-profile-header">
+                            <span class="welcome-text">Hola, <strong>@Context.Session.GetString("UsuarioNombre")</strong></span>
+                            <div class="header-divider"></div>
+                            <a href="/Auth/Logout" class="logout-header-btn" title="Cerrar Sesión">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span class="logout-label">Salir</span>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </header>
+
+            <main class="content-area" id="content-area">
+                @RenderBody()
+            </main>
+
+            <footer class="app-footer">
+                <p>&copy; 2026 IETAM - Instituto Electoral de Tamaulipas.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('main-sidebar').classList.toggle('mobile-active');
+            document.getElementById('sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
