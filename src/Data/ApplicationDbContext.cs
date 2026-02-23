@@ -14,16 +14,22 @@ namespace UrnaElectronica.Data
 
         public DbSet<Partido> Partidos { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Impresora> Impresoras { get; set; }
+
+      protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             
-            // CAMBIO CLAVE: Le decimos a Entity Framework que use el esquema correcto
+            // Mantén el esquema si así está en SQL
             modelBuilder.HasDefaultSchema("UrnaElectronica");
             
-            modelBuilder.Entity<Usuario>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
+            // MAPEO EXPLÍCITO: Asegúrate de que estos nombres sean idénticos a los de SQL
+            modelBuilder.Entity<Partido>().ToTable("Partidos"); 
+            modelBuilder.Entity<Impresora>().ToTable("Impresoras");
+            modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+
+            modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Impresora>().HasIndex(i => i.Mac).IsUnique();
         }
     }
 }
