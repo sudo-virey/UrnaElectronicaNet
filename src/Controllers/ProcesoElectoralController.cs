@@ -1,130 +1,138 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UrnaElectronica.Data;
 using UrnaElectronica.Models;
 
 namespace UrnaElectronica.Controllers
 {
-    /// <summary>
-    /// Controlador para gestionar procesos electorales
-    /// </summary>
-    public class ProcesoElectoralController : BaseController
+    public class ProcesoElectoralController : Controller
     {
-        /// <summary>
-        /// Listar todos los procesos electorales activos
-        /// </summary>
-        public IActionResult Index()
-        {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+        private readonly ApplicationDbContext _context;
 
-            // Datos de ejemplo usando el nuevo modelo simplificado
-            var procesos = new List<ProcesoElectoral>
-            {
-                new ProcesoElectoral 
-                { 
-                    Id = 1, 
-                    Nombre = "Elección Estudiantil 2023",
-                    FechaCreacion = DateTime.Now.AddDays(-30),
-                    IdEstatus = 1
-                },
-                new ProcesoElectoral 
-                { 
-                    Id = 2, 
-                    Nombre = "Consejo Universitario 2024",
-                    FechaCreacion = DateTime.Now,
-                    IdEstatus = 1
-                },
-                new ProcesoElectoral 
-                { 
-                    Id = 3, 
-                    Nombre = "Junta Directiva 2022",
-                    FechaCreacion = DateTime.Now.AddDays(-365),
-                    IdEstatus = 3 // Terminado
-                }
-            };
+        public ProcesoElectoralController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            //if (!VerificarAutenticacion()) return RedirectToAction("Login", "Auth");
+
+            var procesos = await _context.Procesos
+                .Where(p => !p.Eliminado)
+                .OrderByDescending(p => p.FechaCreacion)
+                .ToListAsync();
 
             return View(procesos);
         }
 
-        /// <summary>
-        /// Ver detalles de un proceso electoral
-        /// </summary>
-        public IActionResult Details(int id)
-        {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
+        // GET: Parcial de Creación
+        public IActionResult Create() {
+            return PartialView("_Create", new ProcesoElectoral());
+        }
 
-            var proceso = new ProcesoElectoral 
-            { 
-                Id = id,
-                Nombre = "Elección Estudiantil 2023",
-                FechaCreacion = DateTime.Now.AddDays(-30),
-                IdEstatus = 1
-            };
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ProcesoElectoral modelo)
+        {
+            if (ModelState.IsValid)
+            {
+                modelo.FechaCreacion = DateTime.Now;
+                modelo.Activo = true;
+                modelo.Eliminado = false;
+                modelo.IdEstatus = 1; 
+
+                _context.Procesos.Add(modelo);
+                await _context.SaveChangesAsync();
+
+                // HTMX refresca la tabla automáticamente al cerrar el modal
+                Response.Headers.Add("HX-Refresh", "true");
+            }
+            return PartialView("_Create", modelo);
+        }
+
+        // POST: ProcesoElectoral/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var proceso = await _context.Procesos.FindAsync(id);
+            if (proceso == null) return NotFound();
+            proceso.Eliminado = true; // Borrado lógico
+            _context.Update(proceso);
+            await _context.SaveChangesAsync();
+
+            Response.Headers.Add("HX-Refresh", "true");
+            return Ok();
+        }
+
+
+        // GET: Parcial de Edición
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == 0) return NotFound();
+
+            var proceso = await _context.Procesos.FindAsync(id);
+            if (proceso == null) return NotFound();
+            return PartialView("_Edit", proceso);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProcesoElectoral modelo) // Eliminamos el 'int id' extra para evitar conflictos de mapeo
+        {
+            // 1. Verificación de seguridad
+            if (modelo.Id == 0) return NotFound();
+
+            // 2. Corregimos la lógica: Si el modelo ES válido, guardamos.
+            if (ModelState.IsValid) 
+            {
+                try
+                {
+                    // Buscamos el registro original para no perder datos que no están en el form (como FechaCreacion)
+                    var procesoDB = await _context.Procesos.FindAsync(modelo.Id);
+                    if (procesoDB == null) return NotFound();
+
+                    // Actualizamos solo los campos permitidos
+                    procesoDB.Nombre = modelo.Nombre;
+                    procesoDB.FechaEvento = modelo.FechaEvento;
+                    procesoDB.IdEstatus = modelo.IdEstatus;
+
+                    _context.Update(procesoDB);
+                    await _context.SaveChangesAsync();
+
+                    // Notificamos a HTMX que refresque la página para ver los cambios
+                    Response.Headers.Add("HX-Refresh", "true");
+                    return Ok();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Procesos.Any(e => e.Id == modelo.Id)) return NotFound();
+                    else throw;
+                }
+            }
+
+            // Si hay errores de validación, regresamos la parcial para mostrar los mensajes
+            return PartialView("_Edit", modelo);
+        }
+
+        public static string ObtenerEstatusTexto(int idEstatus)
+        {
+            return idEstatus switch { 1 => "Activo", 3 => "Finalizado", 4 => "Inactivo", _ => "Desconocido" };
+        }
+    
+        public async Task<IActionResult> Details(int id)
+        {
+            if (id == 0) return NotFound();
+
+            var proceso = await _context.Procesos
+                .Include(p => p.Elecciones)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (proceso == null) return NotFound();
 
             return View(proceso);
         }
-
-        /// <summary>
-        /// Crear nuevo proceso electoral (GET - para formularios tradicionales)
-        /// </summary>
-        [HttpGet]
-        public IActionResult Create()
-        {
-            if (!VerificarAutenticacion())
-                return RedirectToAction("Login", "Auth");
-
-            return View();
-        }
-
-        /// <summary>
-        /// Guardar nuevo proceso electoral (POST JSON)
-        /// </summary>
-        [HttpPost]
-        public IActionResult CreateProceso([FromBody] ProcesoElectoral modelo)
-        {
-            if (!VerificarAutenticacion())
-                return Unauthorized();
-
-            // Validar que el nombre no esté vacío
-            if (string.IsNullOrWhiteSpace(modelo.Nombre))
-            {
-                return Json(new { 
-                    success = false, 
-                    message = "El nombre del proceso es requerido" 
-                });
-            }
-
-            // Crear nuevo proceso con id_estatus = 1 (Activo)
-            var nuevoProcesoId = new Random().Next(100, 999); // Simulando ID auto-generado
-            var nuevosProceso = new ProcesoElectoral
-            {
-                Id = nuevoProcesoId,
-                Nombre = modelo.Nombre.Trim(),
-                FechaCreacion = DateTime.Now,
-                IdEstatus = (int)EstatusProcesoElectoral.Activo
-            };
-
-            // TODO: Guardar en base de datos
-
-            return Json(new { 
-                success = true, 
-                message = "Proceso creado exitosamente",
-                data = nuevosProceso
-            });
-        }
-
-        /// <summary>
-        /// Obtener estado en texto
-        /// </summary>
-        public string ObtenerEstatusTexto(int idEstatus)
-        {
-            return idEstatus switch
-            {
-                1 => "Activo",
-                2 => "Eliminado",
-                3 => "Terminado",
-                _ => "Desconocido"
-            };
-        }
+    
     }
 }

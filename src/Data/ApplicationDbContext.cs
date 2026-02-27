@@ -20,6 +20,8 @@ namespace UrnaElectronica.Data
 
         public DbSet<Acceso> Accesos { get; set; }
 
+        public DbSet<ProcesoElectoral> Procesos { get; set; }
+
       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -33,6 +35,7 @@ namespace UrnaElectronica.Data
             modelBuilder.Entity<Impresora>().ToTable("Impresoras");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
             modelBuilder.Entity<Acceso>().ToTable("Accesos");
+            modelBuilder.Entity<ProcesoElectoral>().ToTable("Procesos");
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Impresora>().HasIndex(i => i.Mac).IsUnique();

@@ -1,36 +1,36 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UrnaElectronica.Models
 {
-    /// <summary>
-    /// Modelo de proceso electoral - almacena procesos electorales
-    /// Campos: id_proceso, Nombre, Fecha de creación, id_estatus
-    /// </summary>
+    [Table("Procesos", Schema = "UrnaElectronica")]
     public class ProcesoElectoral
     {
         [Key]
-        public int Id { get; set; }  // id_proceso
+        [Column("Id_Proceso")]
+        public int Id { get; set; }  
         
         [Required(ErrorMessage = "El nombre es requerido")]
-        [StringLength(255, ErrorMessage = "El nombre no puede exceder 255 caracteres")]
+        [StringLength(100)] 
         public string Nombre { get; set; } = string.Empty;
         
-        [Display(Name = "Fecha de Creación")]
+        [Column("Id_Estatus_Proceso")]
+        public int IdEstatus { get; set; } = 1;
+
+        [Column("Fecha_Creado")]
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        
-        [Display(Name = "Estado")]
-        public int IdEstatus { get; set; } = 1; // 1=Activo, 2=Eliminado, 3=Terminado
-        
-        public List<Candidato> Candidatos { get; set; } = new List<Candidato>();
-    }
-    
-    /// <summary>
-    /// Estados posibles de un proceso electoral
-    /// </summary>
-    public enum EstatusProcesoElectoral
-    {
-        Activo = 1,
-        Eliminado = 2,
-        Terminado = 3
+
+        [Column("Activo")]
+        public bool Activo { get; set; } = true;
+
+        [Column("Eliminado")]
+        public bool Eliminado { get; set; } = false;
+
+        // Mapeo a la columna de SQL para el auto-cierre
+        [Column("Fecha_Cerrado")]
+        public DateTime? FechaEvento { get; set; }
+
+        public virtual ICollection<Eleccion> Elecciones { get; set; } = new List<Eleccion>();
+
     }
 }
