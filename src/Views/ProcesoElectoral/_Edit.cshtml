@@ -1,0 +1,39 @@
+@model UrnaElectronica.Models.ProcesoElectoral
+@{ Layout = null; }
+
+<div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; padding: 2rem; border-radius: 12px; width: 500px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+       <div class="modal-header">
+            <h3 style="margin-top: 0; color: #333;">Editar Proceso</h3>
+            <hr />
+         </div>
+        <form hx-post="/ProcesoElectoral/Edit"hx-target="#modal-container">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <div style="margin-bottom: 1rem;">
+                <label>Nombre:</label>
+                <input type="text" name="Nombre" value="@Model.Nombre" class="form-control" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label>Fecha de Cierre:</label>
+                <input type="date" name="FechaEvento" value="@Model.FechaEvento?.ToString("yyyy-MM-dd")" class="form-control" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label>Estatus:</label>
+                <select name="IdEstatus" class="form-control">
+                    <option value="1" selected="@(Model.IdEstatus == 1)">Activo</option>
+                    <option value="3" selected="@(Model.IdEstatus == 3)">Finalizado</option>
+                </select>
+            </div>
+
+            <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
+                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" 
+                        class="btn-cancel-modal">Cancelar</button>
+                <button type="submit" class="btn-save-modal">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
