@@ -22,6 +22,8 @@ namespace UrnaElectronica.Data
 
         public DbSet<ProcesoElectoral> Procesos { get; set; }
 
+        public DbSet<Eleccion> Elecciones { get; set; }
+
       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

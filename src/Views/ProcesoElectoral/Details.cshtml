@@ -1,14 +1,17 @@
 @model UrnaElectronica.Models.ProcesoElectoral
 @using UrnaElectronica.Controllers
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 @{
     ViewData["Title"] = "Detalles del Proceso";
+    // Definimos si el proceso está cerrado para usarlo en varios puntos
+    bool esProcesoCerrado = Model.IdEstatus == 3;
 }
 
 <div class="container-fluid py-4">
-    <div class="mb-3">
-        <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-left"></i> Volver al listado
+    <div style="margin-bottom: 1.5rem;">
+        <a href="@Url.Action("Index")" class="btn-secondary-outline" style="text-decoration:none;">
+            <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
 
@@ -16,17 +19,18 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-12 col-md-8">
-                    <h1 class="h3 mb-1">@Model.Nombre</h1>
+                    <h1 class="h3 mb-1 fw-bold">@Model.Nombre</h1>
                     <p class="text-muted mb-2 mb-md-0">
                         <i class="far fa-calendar-alt me-1"></i> 
                         Fecha del Evento: <strong>@(Model.FechaEvento?.ToString("dd/MM/yyyy") ?? "No asignada")</strong>
                     </p>
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                    <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2">
+                    <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2 shadow-sm" style="font-size: 0.9rem;">
+                        <i class="fas @(esProcesoCerrado ? "fa-archive" : "fa-check-circle") me-1"></i>
                         @ProcesoElectoralController.ObtenerEstatusTexto(Model.IdEstatus)
                     </span>
-                    <div class="text-muted small">Creado el @Model.FechaCreacion.ToString("dd/MM/yyyy")</div>
+                    <div class="text-muted small">Creado: @Model.FechaCreacion.ToString("dd/MM/yyyy")</div>
                 </div>
             </div>
         </div>
@@ -34,48 +38,77 @@
 
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Elecciones Configuradas</h5>
-            <button hx-get="/Eleccion/Create?procesoId=@Model.Id" 
-                    hx-target="#modal-container" 
-                    class="btn btn-primary btn-sm">
-                <i class="fas fa-plus"></i> <span class="d-none d-md-inline">Nueva Elección</span>
-            </button>
+            <div>
+                <h5 class="mb-0 fw-bold">Elecciones</h5>
+                <small class="text-muted">Total de elecciones: @Model.Elecciones.Count(e => !e.Eliminado)</small>
+            </div>
+            
+            
+            @if (!esProcesoCerrado)
+            {
+                <button hx-get="/Eleccion/Create?procesoId=@Model.Id" 
+                        hx-target="#modal-container" class="btn-primary-action" style="border:none; cursor:pointer;">
+                        <i class="fas fa-plus"></i> Registrar Proceso
+                    </button>
+            }
+            else
+            {
+                <span class="text-muted small"><i class="fas fa-ban me-1"></i> Bloqueado</span>
+            }
         </div>
+        
         <div class="card-body p-0">
-            @if (!Model.Elecciones.Any())
+            @if (!Model.Elecciones.Any(e => !e.Eliminado))
             {
                 <div class="text-center py-5">
-                    <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
-                    <p class="text-muted">Aún no hay elecciones registradas en este proceso.</p>
+                    <i class="fas fa-layer-group fa-3x text-light mb-3 d-block"></i>
+                    <p class="text-muted">No hay elecciones activas en este proceso.</p>
                 </div>
             }
             else
             {
                 <div class="list-group list-group-flush">
-                    @foreach (var eleccion in Model.Elecciones)
+                    @foreach (var eleccion in Model.Elecciones.Where(e => !e.Eliminado))
                     {
-                        <div class="list-group-item p-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1 fw-bold text-primary">@eleccion.Nombre</h6>
-                                    <p class="mb-2 small text-muted">ID Elección: #@eleccion.Id</p>
-                                    
-                                    <div class="d-flex flex-wrap gap-2 mt-2">
-                                        <span class="badge bg-light text-dark border">
-                                            <i class="fas fa-microchip me-1"></i> 0 Urnas asignadas
+                        <div class="list-group-item p-3 list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-2 fw-bold">@eleccion.Nombre</h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-light text-dark border small fw-normal">
+                                            <i class="fas fa-tablet-alt me-1 text-info"></i> 0 Urnas
+                                        </span>
+                                        <span class="badge bg-light text-dark border small fw-normal">
+                                            <i class="fas fa-users me-1 text-primary"></i> 0 Candidatos
                                         </span>
                                     </div>
                                 </div>
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
+                                
+                                <div class="d-flex gap-2 align-items-center">
+                                    @* Botones de acceso rápido siempre visibles *@
+                                    <button class="btn btn-sm btn-outline-info" title="Gestionar Urnas">
+                                        <i class="fas fa-tablet-alt"></i>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2 text-warning"></i> Editar</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fas fa-tablet-alt me-2 text-info"></i> Gestionar Urnas</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i> Eliminar</a></li>
-                                    </ul>
+                                    
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Candidatos">
+                                        <i class="fas fa-user-tie"></i>
+                                    </button>
+
+                                    @if (!esProcesoCerrado)
+                                    {
+                                        @* Icono de eliminar con HTMX *@
+                                        <button hx-post="/Eleccion/Delete/@eleccion.Id"
+                                                hx-confirm="¿Estás seguro de que deseas eliminar la elección '@eleccion.Nombre'?"
+                                                hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
+                                                class="btn btn-sm btn-outline-danger" 
+                                                title="Eliminar Elección">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-lock text-muted ms-2" title="Proceso Cerrado"></i>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -87,3 +120,19 @@
 </div>
 
 <div id="modal-container"></div>
+
+<style>
+    /* Ajustes para mejorar la experiencia móvil */
+    .btn-sm {
+        padding: 0.4rem 0.6rem;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Evitar que el dropdown se corte en móviles */
+    .dropdown-menu {
+        z-index: 1050;
+    }
+</style>
