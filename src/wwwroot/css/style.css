@@ -282,7 +282,7 @@ html, body {
 .btn-primary-action {
     background-color: var(--primary-color);
     color: white;
-    padding: 0.8rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
@@ -425,3 +425,140 @@ html, body {
     gap: 10px;
     margin-top: 1.5rem;
 }
+
+/* --- ESTILOS PARA LA VISTA DE DETALLES --- */
+
+.details-page-container {
+    padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.d-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Tarjeta de Información General */
+.info-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.info-card-body {
+    padding: 1.5rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.info-item p {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 1rem;
+}
+
+/* Banners de Bloqueo para Procesos Finalizados */
+.border-lock { 
+    border-top: 4px solid #444 !important; 
+}
+
+.lock-banner {
+    background: #333;
+    color: white;
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Etiquetas (Tags) informativas */
+.tag-info { 
+    background: #e1f5fe; 
+    color: #0288d1; 
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.tag-primary { 
+    background: #fff4e5; 
+    color: var(--primary-dark); 
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0 1rem 0;
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    color: var(--text-dark);
+}
+
+/* Botón Volver secundario */
+.btn-secondary-outline {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: white;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary-outline:hover {
+    background: #f8f9fa;
+}
+
+
+/* Estilo para el ítem activo */
+.nav-item.active {
+    background-color: #f4c54215; /* Fondo ligero */
+    color: var(--primary-dark);   /* Color institucional */
+    border-right: 4px solid var(--primary-color); /* Indicador visual derecho */
+    font-weight: 600;
+}
+
+.nav-item.active i {
+    color: var(--primary-color);
+}
+/* Media Query para Móviles */
+/*@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}*/
