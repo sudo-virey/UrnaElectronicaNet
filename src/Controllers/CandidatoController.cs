@@ -86,5 +86,31 @@ namespace UrnaElectronica.Controllers
             ViewBag.Partidos = _context.Partidos.ToList();
             return PartialView(CreatePartialPath, modelo);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, int eleccionId)
+        {
+            var candidato = await _context.Candidatos
+                .FirstOrDefaultAsync(c => c.Id == id && c.IdEleccion == eleccionId && !c.Eliminado);
+
+            if (candidato == null)
+            {
+                return NotFound();
+            }
+
+            candidato.Eliminado = true;
+            candidato.Activo = false;
+
+            _context.Candidatos.Update(candidato);
+            await _context.SaveChangesAsync();
+
+            var candidatos = await _context.Candidatos
+                .Where(c => c.IdEleccion == eleccionId && !c.Eliminado)
+                .ToListAsync();
+
+            ViewBag.IdEleccion = eleccionId;
+            return PartialView(ListaPartialPath, candidatos);
+        }
     }
 }
