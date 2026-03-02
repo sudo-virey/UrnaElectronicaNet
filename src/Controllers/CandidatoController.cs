@@ -79,7 +79,7 @@ namespace UrnaElectronica.Controllers
                 _context.Candidatos.Add(modelo);
                 await _context.SaveChangesAsync();
 
-                Response.Headers["HX-Refresh"] = "true";
+                Response.Headers["HX-Trigger"] = $"{{\"candidatoCreado\":{{\"idEleccion\":{modelo.IdEleccion}}}}}";
                 return Ok();
             }
             

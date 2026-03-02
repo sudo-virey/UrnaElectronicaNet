@@ -33,6 +33,71 @@ function initializeEventListeners() {
             eyeOffIcon.style.display = isPassword ? 'block' : 'none';
         });
     }
+
+    document.body.addEventListener('candidatoCreado', function (event) {
+        const idEleccion = event?.detail?.idEleccion
+            ?? event?.detail?.value?.idEleccion
+            ?? event?.detail?.elt?.getAttribute?.('data-id-eleccion');
+        const modalContainer = document.getElementById('modal-container');
+
+        if (modalContainer) {
+            modalContainer.innerHTML = '';
+        }
+
+        if (!idEleccion || typeof htmx === 'undefined') {
+            return;
+        }
+
+        const targetSelector = `#candidatos-area-${idEleccion}`;
+        if (document.querySelector(targetSelector)) {
+            htmx.ajax('GET', `/Candidato/Listar/${idEleccion}`, {
+                target: targetSelector,
+                swap: 'innerHTML'
+            });
+        }
+    });
+
+    document.body.addEventListener('click', function (event) {
+        const toggleButton = event.target.closest('.js-toggle-candidatos');
+        if (!toggleButton) {
+            return;
+        }
+
+        const idEleccion = toggleButton.getAttribute('data-eleccion-id');
+        if (!idEleccion) {
+            return;
+        }
+
+        const targetSelector = `#candidatos-area-${idEleccion}`;
+        const target = document.querySelector(targetSelector);
+        if (!target) {
+            return;
+        }
+
+        const expanded = toggleButton.getAttribute('data-expanded') === 'true';
+        const label = toggleButton.querySelector('i')
+            ? '<i class="fas fa-users me-1"></i> '
+            : '';
+
+        if (expanded) {
+            target.innerHTML = '';
+            toggleButton.setAttribute('data-expanded', 'false');
+            toggleButton.innerHTML = `${label}Ver Candidatos`;
+            return;
+        }
+
+        if (typeof htmx === 'undefined') {
+            return;
+        }
+
+        htmx.ajax('GET', `/Candidato/Listar/${idEleccion}`, {
+            target: targetSelector,
+            swap: 'innerHTML'
+        });
+
+        toggleButton.setAttribute('data-expanded', 'true');
+        toggleButton.innerHTML = `${label}Ocultar Candidatos`;
+    });
 }
 
 // Utility function to show notifications
