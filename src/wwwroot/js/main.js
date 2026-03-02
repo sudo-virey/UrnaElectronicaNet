@@ -34,7 +34,7 @@ function initializeEventListeners() {
         });
     }
 
-    document.body.addEventListener('candidatoCreado', function (event) {
+    function onCandidatoChanged(event) {
         const idEleccion = event?.detail?.idEleccion
             ?? event?.detail?.value?.idEleccion
             ?? event?.detail?.elt?.getAttribute?.('data-id-eleccion');
@@ -55,7 +55,10 @@ function initializeEventListeners() {
                 swap: 'innerHTML'
             });
         }
-    });
+    }
+
+    document.body.addEventListener('candidatoCreado', onCandidatoChanged);
+    document.body.addEventListener('candidatoActualizado', onCandidatoChanged);
 
     document.body.addEventListener('click', function (event) {
         const toggleButton = event.target.closest('.js-toggle-candidatos');
@@ -97,6 +100,43 @@ function initializeEventListeners() {
 
         toggleButton.setAttribute('data-expanded', 'true');
         toggleButton.innerHTML = `${label}Ocultar Candidatos`;
+    });
+
+    document.body.addEventListener('change', function (event) {
+        const input = event.target.closest('.js-candidato-foto-input');
+        if (!input) {
+            return;
+        }
+
+        const previewWrapId = input.getAttribute('data-preview-wrap-id');
+        const previewImgId = input.getAttribute('data-preview-img-id');
+        const fileNameId = input.getAttribute('data-file-name-id');
+
+        const previewWrap = previewWrapId ? document.getElementById(previewWrapId) : null;
+        const previewImg = previewImgId ? document.getElementById(previewImgId) : null;
+        const fileNameLabel = fileNameId ? document.getElementById(fileNameId) : null;
+
+        const file = input.files && input.files.length > 0 ? input.files[0] : null;
+        if (!file) {
+            return;
+        }
+
+        if (fileNameLabel) {
+            fileNameLabel.textContent = `Archivo seleccionado: ${file.name}`;
+        }
+
+        if (!previewImg || typeof FileReader === 'undefined') {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (readerEvent) {
+            previewImg.src = readerEvent.target?.result || '';
+            if (previewWrap) {
+                previewWrap.style.display = 'block';
+            }
+        };
+        reader.readAsDataURL(file);
     });
 }
 

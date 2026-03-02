@@ -3,27 +3,29 @@
 
 <div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
     <div style="background: white; padding: 1.5rem; border-radius: 12px; width: 520px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-        <h3 style="margin-top: 0; color: #333;">Nuevo Candidato</h3>
-        <p class="text-muted small">Complete la información del candidato para esta elección.</p>
+        <h3 style="margin-top: 0; color: #333;">Editar Candidato</h3>
+        <p class="text-muted small">Actualiza los datos del candidato seleccionado.</p>
         <hr />
 
-        <form hx-post="/Candidato/Create" enctype="multipart/form-data" hx-target="#modal-container">
+        <form hx-post="/Candidato/Edit/@Model.Id" enctype="multipart/form-data" hx-target="#modal-container">
             @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
             <input type="hidden" name="IdEleccion" value="@Model.IdEleccion" />
+            <input type="hidden" name="IdPartido" value="@Model.IdPartido" />
 
             <div class="mb-3">
                 <label>Nombre del Candidato</label>
-                <input type="text" name="Nombre" class="form-control" required />
+                <input type="text" name="Nombre" class="form-control" value="@Model.Nombre" required />
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label>Color de Fondo (Hex)</label>
-                    <input type="color" name="ColorFondo" class="form-control" value="#ffffff" />
+                    <input type="color" name="ColorFondo" class="form-control" value="@(string.IsNullOrWhiteSpace(Model.ColorFondo) ? "#ffffff" : Model.ColorFondo)" />
                 </div>
                 <div class="col-md-6 mb-3">
                     <label>Color de Texto (Hex)</label>
-                    <input type="color" name="ColorTexto" class="form-control" value="#000000" />
+                    <input type="color" name="ColorTexto" class="form-control" value="@(string.IsNullOrWhiteSpace(Model.ColorTexto) ? "#000000" : Model.ColorTexto)" />
                 </div>
             </div>
 
@@ -34,15 +36,16 @@
                            name="FotoFile"
                            class="form-control js-candidato-foto-input"
                            accept="image/*"
-                           data-preview-wrap-id="foto-preview-wrap-create"
-                           data-preview-img-id="foto-preview-img-create"
-                           data-file-name-id="foto-file-name-create" />
-                    <small id="foto-file-name-create" class="text-muted d-block mt-2">Sin archivo seleccionado.</small>
+                           data-preview-wrap-id="foto-preview-wrap-edit"
+                           data-preview-img-id="foto-preview-img-edit"
+                           data-file-name-id="foto-file-name-edit" />
+                    <small id="foto-file-name-edit" class="text-muted d-block mt-2">Sin cambios en imagen.</small>
 
-                    <div id="foto-preview-wrap-create" style="display: none; margin-top: 0.75rem;">
-                        <small class="text-muted d-block">Vista previa</small>
-                        <img id="foto-preview-img-create"
-                             src=""
+                    <div id="foto-preview-wrap-edit"
+                         style="@(string.IsNullOrWhiteSpace(Model.FotoRuta) ? "display: none;" : "display: block;") margin-top: 0.75rem;">
+                        <small class="text-muted d-block">@(string.IsNullOrWhiteSpace(Model.FotoRuta) ? "Vista previa" : "Imagen actual")</small>
+                        <img id="foto-preview-img-edit"
+                             src="@(Model.FotoRuta ?? string.Empty)"
                              alt="Vista previa"
                              style="width: 56px; height: 56px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd;" />
                     </div>
@@ -51,7 +54,7 @@
 
             <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
                 <button type="button" onclick="document.getElementById('modal-backdrop').remove()" class="btn-cancel-modal">Cancelar</button>
-                <button type="submit" class="btn-save-modal">Guardar</button>
+                <button type="submit" class="btn-save-modal">Actualizar Cambios</button>
             </div>
         </form>
     </div>

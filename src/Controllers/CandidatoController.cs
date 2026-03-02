@@ -9,6 +9,7 @@ namespace UrnaElectronica.Controllers
         private readonly ApplicationDbContext _context;
         private const string ListaPartialPath = "~/Views/Candidatos/_Listar.cshtml";
         private const string CreatePartialPath = "~/Views/Candidatos/_Create.cshtml";
+        private const string EditPartialPath = "~/Views/Candidatos/_Edit.cshtml";
 
         public CandidatoController(ApplicationDbContext context)
         {
@@ -111,6 +112,77 @@ namespace UrnaElectronica.Controllers
 
             ViewBag.IdEleccion = eleccionId;
             return PartialView(ListaPartialPath, candidatos);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var candidato = await _context.Candidatos
+                .FirstOrDefaultAsync(c => c.Id == id && !c.Eliminado);
+
+            if (candidato == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView(EditPartialPath, candidato);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Candidato modelo, IFormFile? FotoFile)
+        {
+            if (id != modelo.Id)
+            {
+                return NotFound();
+            }
+
+            var candidatoExistente = await _context.Candidatos
+                .FirstOrDefaultAsync(c => c.Id == id && !c.Eliminado);
+
+            if (candidatoExistente == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                candidatoExistente.Nombre = modelo.Nombre;
+                candidatoExistente.ColorFondo = modelo.ColorFondo;
+                candidatoExistente.ColorTexto = modelo.ColorTexto;
+                candidatoExistente.IdPartido = modelo.IdPartido;
+
+                if (FotoFile != null && FotoFile.Length > 0)
+                {
+                    string folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/candidatos");
+
+                    if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+                    string fileName = Guid.NewGuid() + Path.GetExtension(FotoFile.FileName);
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await FotoFile.CopyToAsync(stream);
+                    }
+
+                    candidatoExistente.FotoRuta = "/uploads/candidatos/" + fileName;
+                }
+
+                _context.Candidatos.Update(candidatoExistente);
+                await _context.SaveChangesAsync();
+
+                Response.Headers["HX-Trigger"] = $"{{\"candidatoActualizado\":{{\"idEleccion\":{candidatoExistente.IdEleccion}}}}}";
+                return Ok();
+            }
+
+            modelo.IdEleccion = candidatoExistente.IdEleccion;
+            modelo.FotoRuta = candidatoExistente.FotoRuta;
+            return PartialView(EditPartialPath, modelo);
         }
     }
 }
