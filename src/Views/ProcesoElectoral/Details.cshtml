@@ -90,28 +90,14 @@
                                     <button class="btn btn-sm btn-outline-info" title="Gestionar Urnas">
                                         <i class="fas fa-tablet-alt"></i>
                                     </button>
-
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Candidatos">
-                                        <i class="fas fa-user-tie"></i>
-                                    </button>
-                                    <div class="d-flex gap-2">
-                                        @if (!esProcesoCerrado)
-                                        {
-                                            @* BOTÓN PARA ABRIR MODAL DE CANDIDATO *@
-                                            <button hx-get="/Candidato/Create?eleccionId=@eleccion.Id" 
-                                                    hx-target="#modal-container" 
-                                                    class="btn btn-sm btn-outline-success">
-                                                <i class="fas fa-user-plus"></i> + Candidato
-                                            </button>
-                                            
-                                            @* Tus botones existentes de Editar/Eliminar Elección *@
-                                        }
-                                    </div>
+                                   
                                     <button type="button"
-                                            class="btn btn-sm btn-outline-primary px-3 js-toggle-candidatos"
+                                            class="btn btn-sm btn-outline-primary js-toggle-candidatos"
                                             data-eleccion-id="@eleccion.Id"
-                                            data-expanded="false">
-                                        <i class="fas fa-users me-1"></i> Ver Candidatos
+                                            data-expanded="false"
+                                            title="Ver candidatos"
+                                            aria-label="Ver candidatos">
+                                        <i class="fas fa-users"></i>
                                     </button>
                                     @if (!esProcesoCerrado)
                                     {

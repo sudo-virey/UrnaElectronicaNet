@@ -60,6 +60,20 @@ function initializeEventListeners() {
     document.body.addEventListener('candidatoCreado', onCandidatoChanged);
     document.body.addEventListener('candidatoActualizado', onCandidatoChanged);
 
+    function setToggleCandidatosState(toggleButton, expanded) {
+        const icon = toggleButton.querySelector('i');
+        const nextTitle = expanded ? 'Ocultar candidatos' : 'Ver candidatos';
+
+        toggleButton.setAttribute('data-expanded', expanded ? 'true' : 'false');
+        toggleButton.setAttribute('title', nextTitle);
+        toggleButton.setAttribute('aria-label', nextTitle);
+
+        if (icon) {
+            icon.classList.remove('fa-users', 'fa-user-slash');
+            icon.classList.add(expanded ? 'fa-user-slash' : 'fa-users');
+        }
+    }
+
     document.body.addEventListener('click', function (event) {
         const toggleButton = event.target.closest('.js-toggle-candidatos');
         if (!toggleButton) {
@@ -78,14 +92,10 @@ function initializeEventListeners() {
         }
 
         const expanded = toggleButton.getAttribute('data-expanded') === 'true';
-        const label = toggleButton.querySelector('i')
-            ? '<i class="fas fa-users me-1"></i> '
-            : '';
 
         if (expanded) {
             target.innerHTML = '';
-            toggleButton.setAttribute('data-expanded', 'false');
-            toggleButton.innerHTML = `${label}Ver Candidatos`;
+            setToggleCandidatosState(toggleButton, false);
             return;
         }
 
@@ -98,8 +108,7 @@ function initializeEventListeners() {
             swap: 'innerHTML'
         });
 
-        toggleButton.setAttribute('data-expanded', 'true');
-        toggleButton.innerHTML = `${label}Ocultar Candidatos`;
+        setToggleCandidatosState(toggleButton, true);
     });
 
     document.body.addEventListener('change', function (event) {
@@ -127,7 +136,7 @@ function initializeEventListeners() {
 
         if (!previewImg || typeof FileReader === 'undefined') {
             return;
-        }
+        }   
 
         const reader = new FileReader();
         reader.onload = function (readerEvent) {
