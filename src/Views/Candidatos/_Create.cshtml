@@ -1,5 +1,8 @@
 @model Candidato
 @{ Layout = null; }
+@{
+    var partidos = ViewBag.Partidos as IEnumerable<UrnaElectronica.Models.Partido> ?? Enumerable.Empty<UrnaElectronica.Models.Partido>();
+}
 
 <div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
     <div style="background: white; padding: 1.5rem; border-radius: 12px; width: 520px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
@@ -14,6 +17,17 @@
             <div class="mb-3">
                 <label>Nombre del Candidato</label>
                 <input type="text" name="Nombre" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label>Partido (opcional)</label>
+                <select name="IdPartido" class="form-select">
+                    <option value="">Sin partido</option>
+                    @foreach (var partido in partidos)
+                    {
+                        <option value="@partido.Id_Partido">@partido.Nombre</option>
+                    }
+                </select>
             </div>
 
             <div class="row">

@@ -28,8 +28,13 @@ namespace UrnaElectronica.Controllers
                 .Where(c => c.IdEleccion == id && !c.Eliminado)
                 .ToListAsync();
 
+            var partidosMap = await _context.Partidos
+                .Where(p => !p.Eliminado)
+                .ToDictionaryAsync(p => p.Id_Partido, p => p.Nombre);
+
             // Pasamos el IdEleccion a la vista para el botón "Agregar"
             ViewBag.IdEleccion = id;
+            ViewBag.PartidosMap = partidosMap;
 
             return PartialView(ListaPartialPath, candidatos);
         }
@@ -38,7 +43,7 @@ namespace UrnaElectronica.Controllers
         public IActionResult Create(int eleccionId)
         {
             // Cargamos los partidos para el select del modal
-            ViewBag.Partidos = _context.Partidos.Where(p => p.Estado).ToList();
+            ViewBag.Partidos = _context.Partidos.Where(p => p.Estado && !p.Eliminado).ToList();
             
             var modelo = new Candidato { IdEleccion = eleccionId };
             return PartialView(CreatePartialPath, modelo);
@@ -84,7 +89,7 @@ namespace UrnaElectronica.Controllers
                 return Ok();
             }
             
-            ViewBag.Partidos = _context.Partidos.ToList();
+            ViewBag.Partidos = _context.Partidos.Where(p => p.Estado && !p.Eliminado).ToList();
             return PartialView(CreatePartialPath, modelo);
         }
 
@@ -110,7 +115,12 @@ namespace UrnaElectronica.Controllers
                 .Where(c => c.IdEleccion == eleccionId && !c.Eliminado)
                 .ToListAsync();
 
+            var partidosMap = await _context.Partidos
+                .Where(p => !p.Eliminado)
+                .ToDictionaryAsync(p => p.Id_Partido, p => p.Nombre);
+
             ViewBag.IdEleccion = eleccionId;
+            ViewBag.PartidosMap = partidosMap;
             return PartialView(ListaPartialPath, candidatos);
         }
 
@@ -128,6 +138,8 @@ namespace UrnaElectronica.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Partidos = _context.Partidos.Where(p => !p.Eliminado).ToList();
 
             return PartialView(EditPartialPath, candidato);
         }
@@ -182,6 +194,7 @@ namespace UrnaElectronica.Controllers
 
             modelo.IdEleccion = candidatoExistente.IdEleccion;
             modelo.FotoRuta = candidatoExistente.FotoRuta;
+            ViewBag.Partidos = _context.Partidos.Where(p => !p.Eliminado).ToList();
             return PartialView(EditPartialPath, modelo);
         }
     }
