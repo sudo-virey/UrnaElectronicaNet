@@ -44,6 +44,21 @@ namespace UrnaElectronica.Middleware
                 if (string.IsNullOrEmpty(usuarioEmail) && path != "/")
                 {
                     _logger.LogWarning($"Acceso denegado a ruta protegida: {path}");
+
+                    var esRequestHtmx = string.Equals(
+                        context.Request.Headers["HX-Request"],
+                        "true",
+                        StringComparison.OrdinalIgnoreCase);
+
+                    if (esRequestHtmx)
+                    {
+                        context.Response.Headers["HX-Redirect"] = "/Auth/Login";
+                        context.Response.StatusCode = StatusCodes.Status200OK;
+                        context.Response.ContentType = "text/html; charset=utf-8";
+                        await context.Response.WriteAsync("<script>window.location='/Auth/Login';</script>");
+                        return;
+                    }
+
                     context.Response.Redirect("/Auth/Login");
                     return;
                 }
