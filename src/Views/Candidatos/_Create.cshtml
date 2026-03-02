@@ -1,0 +1,41 @@
+@model Candidato
+@{ Layout = null; }
+
+<div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; width: 520px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <h3 style="margin-top: 0; color: #333;">Nuevo Candidato</h3>
+        <p class="text-muted small">Complete la información del candidato para esta elección.</p>
+        <hr />
+
+        <form hx-post="/Candidato/Create" enctype="multipart/form-data" hx-target="#modal-container">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="IdEleccion" value="@Model.IdEleccion" />
+
+            <div class="mb-3">
+                <label>Nombre del Candidato</label>
+                <input type="text" name="Nombre" class="form-control" required />
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Color de Fondo (Hex)</label>
+                    <input type="color" name="ColorFondo" class="form-control" value="#ffffff" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Color de Texto (Hex)</label>
+                    <input type="color" name="ColorTexto" class="form-control" value="#000000" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label>Seleccionar Logo/Foto</label>
+                <input type="file" name="FotoFile" class="form-control" accept="image/*" />
+            </div>
+
+            <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
+                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" class="btn-cancel-modal">Cancelar</button>
+                <button type="submit" class="btn-save-modal">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

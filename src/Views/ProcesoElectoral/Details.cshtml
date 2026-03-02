@@ -21,12 +21,13 @@
                 <div class="col-12 col-md-8">
                     <h1 class="h3 mb-1 fw-bold">@Model.Nombre</h1>
                     <p class="text-muted mb-2 mb-md-0">
-                        <i class="far fa-calendar-alt me-1"></i> 
+                        <i class="far fa-calendar-alt me-1"></i>
                         Fecha del Evento: <strong>@(Model.FechaEvento?.ToString("dd/MM/yyyy") ?? "No asignada")</strong>
                     </p>
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                    <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2 shadow-sm" style="font-size: 0.9rem;">
+                    <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2 shadow-sm"
+                          style="font-size: 0.9rem;">
                         <i class="fas @(esProcesoCerrado ? "fa-archive" : "fa-check-circle") me-1"></i>
                         @ProcesoElectoralController.ObtenerEstatusTexto(Model.IdEstatus)
                     </span>
@@ -42,21 +43,21 @@
                 <h5 class="mb-0 fw-bold">Elecciones</h5>
                 <small class="text-muted">Total de elecciones: @Model.Elecciones.Count(e => !e.Eliminado)</small>
             </div>
-            
-            
+
+
             @if (!esProcesoCerrado)
             {
-                <button hx-get="/Eleccion/Create?procesoId=@Model.Id" 
-                        hx-target="#modal-container" class="btn-primary-action" style="border:none; cursor:pointer;">
-                        <i class="fas fa-plus"></i> Registrar Proceso
-                    </button>
+                <button hx-get="/Eleccion/Create?procesoId=@Model.Id" hx-target="#modal-container"
+                        class="btn-primary-action" style="border:none; cursor:pointer;">
+                    <i class="fas fa-plus"></i> Registrar elección
+                </button>
             }
             else
             {
                 <span class="text-muted small"><i class="fas fa-ban me-1"></i> Bloqueado</span>
             }
         </div>
-        
+
         <div class="card-body p-0">
             @if (!Model.Elecciones.Any(e => !e.Eliminado))
             {
@@ -83,25 +84,48 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="d-flex gap-2 align-items-center">
                                     @* Botones de acceso rápido siempre visibles *@
                                     <button class="btn btn-sm btn-outline-info" title="Gestionar Urnas">
                                         <i class="fas fa-tablet-alt"></i>
                                     </button>
-                                    
+
                                     <button class="btn btn-sm btn-outline-primary" title="Ver Candidatos">
                                         <i class="fas fa-user-tie"></i>
                                     </button>
-
+                                    <div class="d-flex gap-2">
+                                        @if (!esProcesoCerrado)
+                                        {
+                                            @* BOTÓN PARA ABRIR MODAL DE CANDIDATO *@
+                                            <button hx-get="/Candidato/Create?eleccionId=@eleccion.Id" 
+                                                    hx-target="#modal-container" 
+                                                    class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-user-plus"></i> + Candidato
+                                            </button>
+                                            
+                                            @* Tus botones existentes de Editar/Eliminar Elección *@
+                                        }
+                                    </div>
+                                    <button hx-get="/Candidato/Listar/@eleccion.Id" 
+                                                    hx-target="#candidatos-area-@eleccion.Id" 
+                                                    hx-swap="innerHTML"
+                                                    class="btn btn-sm btn-outline-primary px-3">
+                                                <i class="fas fa-users me-1"></i> Ver Candidatos
+                                            </button>
                                     @if (!esProcesoCerrado)
                                     {
+                                        @* NUEVO: Botón Editar *@
+                                        <button hx-get="/Eleccion/Edit/@eleccion.Id"      hx-target="#modal-container"  class="btn-icon"
+                                                title="Editar Elección"             style="background:none; border:none; cursor:pointer;">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         @* Icono de eliminar con HTMX *@
                                         <button hx-post="/Eleccion/Delete/@eleccion.Id"
                                                 hx-confirm="¿Estás seguro de que deseas eliminar la elección '@eleccion.Nombre'?"
                                                 hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
-                                                class="btn btn-sm btn-outline-danger" 
-                                                title="Eliminar Elección">
+                                                class="btn btn-sm btn-outline-danger" title="Eliminar Elección"
+                                                style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     }
@@ -110,7 +134,9 @@
                                         <i class="fas fa-lock text-muted ms-2" title="Proceso Cerrado"></i>
                                     }
                                 </div>
+                                
                             </div>
+                            <div id="candidatos-area-@eleccion.Id" class="mt-3"></div>
                         </div>
                     }
                 </div>
@@ -126,7 +152,7 @@
     .btn-sm {
         padding: 0.4rem 0.6rem;
     }
-    
+
     .list-group-item:hover {
         background-color: #f8f9fa;
     }
