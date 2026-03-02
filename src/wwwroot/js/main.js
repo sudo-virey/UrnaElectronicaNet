@@ -60,6 +60,31 @@ function initializeEventListeners() {
     document.body.addEventListener('candidatoCreado', onCandidatoChanged);
     document.body.addEventListener('candidatoActualizado', onCandidatoChanged);
 
+    function onUrnaEleccionChanged(event) {
+        const idEleccion = event?.detail?.idEleccion
+            ?? event?.detail?.value?.idEleccion
+            ?? event?.detail?.elt?.getAttribute?.('data-id-eleccion');
+        const modalContainer = document.getElementById('modal-container');
+
+        if (modalContainer) {
+            modalContainer.innerHTML = '';
+        }
+
+        if (!idEleccion || typeof htmx === 'undefined') {
+            return;
+        }
+
+        const targetSelector = `#urnas-area-${idEleccion}`;
+        if (document.querySelector(targetSelector)) {
+            htmx.ajax('GET', `/UrnaEleccion/Listar/${idEleccion}`, {
+                target: targetSelector,
+                swap: 'innerHTML'
+            });
+        }
+    }
+
+    document.body.addEventListener('urnaEleccionChanged', onUrnaEleccionChanged);
+
     function setToggleCandidatosState(toggleButton, expanded) {
         const icon = toggleButton.querySelector('i');
         const nextTitle = expanded ? 'Ocultar candidatos' : 'Ver candidatos';

@@ -26,6 +26,10 @@ namespace UrnaElectronica.Data
 
         public DbSet<Candidato> Candidatos { get; set; }
 
+        public DbSet<UrnaEleccion> UrnasElecciones { get; set; }
+
+        public DbSet<CatEstatusUrna> CatEstatusUrna { get; set; }
+
       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -40,6 +44,8 @@ namespace UrnaElectronica.Data
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
             modelBuilder.Entity<Acceso>().ToTable("Accesos");
             modelBuilder.Entity<ProcesoElectoral>().ToTable("Procesos");
+            modelBuilder.Entity<UrnaEleccion>().ToTable("Urnas_Elecciones");
+            modelBuilder.Entity<CatEstatusUrna>().ToTable("Cat_Estatus_Urna");
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Impresora>().HasIndex(i => i.Mac).IsUnique();

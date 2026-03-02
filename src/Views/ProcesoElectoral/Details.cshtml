@@ -87,7 +87,11 @@
 
                                 <div class="d-flex gap-2 align-items-center">
                                     @* Botones de acceso rápido siempre visibles *@
-                                    <button class="btn btn-sm btn-outline-info" title="Gestionar Urnas">
+                                    <button hx-get="/UrnaEleccion/Listar/@eleccion.Id"
+                                            hx-target="#urnas-area-@eleccion.Id"
+                                            hx-swap="innerHTML"
+                                            class="btn btn-sm btn-outline-info"
+                                            title="Gestionar Urnas">
                                         <i class="fas fa-tablet-alt"></i>
                                     </button>
                                    
@@ -122,6 +126,7 @@
                                 </div>
                                 
                             </div>
+                            <div id="urnas-area-@eleccion.Id" class="mt-3"></div>
                             <div id="candidatos-area-@eleccion.Id" class="mt-3"></div>
                         </div>
                     }

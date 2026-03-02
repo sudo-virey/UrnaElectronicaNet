@@ -1,0 +1,65 @@
+@model UrnaElectronica.Models.UrnaEleccion
+@{
+    Layout = null;
+    var urnas = ViewBag.Urnas as IEnumerable<UrnaElectronica.Models.Urna> ?? Enumerable.Empty<UrnaElectronica.Models.Urna>();
+    var estatus = ViewBag.Estatus as Dictionary<int, string> ?? new Dictionary<int, string>();
+}
+
+<div id="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; width: 620px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <h3 style="margin-top: 0; color: #333;">Asignar Urna a Elección</h3>
+        <p class="text-muted small">Define la urna, estatus y parámetros operativos de la asignación.</p>
+        <hr />
+
+        <form hx-post="/UrnaEleccion/Create" hx-target="#modal-container">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="IdEleccion" value="@Model.IdEleccion" />
+            <input type="hidden" name="Eliminado" value="false" />
+            <input type="hidden" name="IdEstatusUrna" value="1" />
+
+            @Html.ValidationSummary(false, "", new { @class = "text-danger small mb-2" })
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Urna</label>
+                    <select name="IdUrna" class="form-select" required>
+                        <option value="">Seleccione urna...</option>
+                        @foreach (var urna in urnas)
+                        {
+                            <option value="@urna.Id_Urna">@urna.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Lista Nominal</label>
+                    <input type="number" name="ListaNominal" min="0" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label>Estatus de urna</label>
+                    <input type="text" class="form-control" value="En espera" readonly />
+                    <small class="text-muted">Al asignar siempre inicia en estado "En espera" y después lo actualiza la app de urna.</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <small class="text-muted">La fecha/hora de inicio y fin se actualiza automáticamente desde la app de urna.</small>
+            </div>
+
+            <div class="form-status-container mb-3">
+                <label class="form-check-label">
+                    <input asp-for="Activo" type="checkbox" />
+                    <span>Asignación activa</span>
+                </label>
+            </div>
+
+            <div style="text-align: right; padding-top: 1rem; border-top: 1px solid #eee;">
+                <button type="button" onclick="document.getElementById('modal-backdrop').remove()" class="btn-cancel-modal">Cancelar</button>
+                <button type="submit" class="btn-save-modal">Guardar Asignación</button>
+            </div>
+        </form>
+    </div>
+</div>
