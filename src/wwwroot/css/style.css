@@ -358,6 +358,137 @@ html, body {
     margin-right: 0.5rem;
 }
 
+/* =============================
+   ESTILOS UNIFICADOS - DETAILS
+   ============================= */
+.detail-back-link {
+    text-decoration: none;
+}
+
+.detail-meta-badge {
+    font-size: 0.9rem;
+}
+
+.detail-item-hover:hover {
+    background-color: #f8f9fa;
+}
+
+.detail-action-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.inline-panel {
+    margin-top: 0.9rem;
+    padding: 0.9rem;
+    border-left: 4px solid;
+    border-radius: 10px;
+    background: #fbfcfd;
+}
+
+.inline-panel--candidatos {
+    border-left-color: #0d6efd;
+}
+
+.inline-panel--urnas {
+    border-left-color: #17a2b8;
+}
+
+.inline-panel__title {
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.inline-panel__empty {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.inline-avatar {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.inline-color-chip {
+    border: 1px solid #d9d9d9;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+/* =============================
+   ESTILOS UNIFICADOS - MODALES
+   ============================= */
+.app-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.app-modal {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    max-width: 95%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.app-modal--md {
+    width: 520px;
+}
+
+.app-modal--lg {
+    width: 620px;
+}
+
+.app-modal--sm {
+    width: 450px;
+}
+
+.app-modal__title {
+    margin-top: 0;
+    color: #333;
+}
+
+.app-modal__subtitle {
+    color: #6c757d;
+    font-size: 0.87rem;
+}
+
+.app-modal__field {
+    margin-bottom: 1rem;
+}
+
+.app-modal__footer {
+    text-align: right;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.app-upload-box {
+    border: 1px dashed #cfd6df;
+    border-radius: 10px;
+    padding: 0.85rem;
+    background: #fafbfc;
+}
+
+.app-upload-preview {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+
 
 /* Contenedor del interruptor de estado */
 .form-status-container {
