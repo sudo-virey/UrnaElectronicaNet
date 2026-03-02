@@ -131,6 +131,26 @@ namespace UrnaElectronica.Controllers
 
             if (proceso == null) return NotFound();
 
+            var eleccionesIds = proceso.Elecciones
+                .Where(e => !e.Eliminado)
+                .Select(e => e.Id)
+                .ToList();
+
+            var candidatosPorEleccion = await _context.Candidatos
+                .Where(c => eleccionesIds.Contains(c.IdEleccion) && !c.Eliminado)
+                .GroupBy(c => c.IdEleccion)
+                .Select(g => new { IdEleccion = g.Key, Total = g.Count() })
+                .ToDictionaryAsync(x => x.IdEleccion, x => x.Total);
+
+            var urnasPorEleccion = await _context.UrnasElecciones
+                .Where(ue => eleccionesIds.Contains(ue.IdEleccion) && !ue.Eliminado)
+                .GroupBy(ue => ue.IdEleccion)
+                .Select(g => new { IdEleccion = g.Key, Total = g.Count() })
+                .ToDictionaryAsync(x => x.IdEleccion, x => x.Total);
+
+            ViewBag.CandidatosPorEleccion = candidatosPorEleccion;
+            ViewBag.UrnasPorEleccion = urnasPorEleccion;
+
             return View(proceso);
         }
     

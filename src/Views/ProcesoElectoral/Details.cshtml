@@ -6,6 +6,8 @@
     ViewData["Title"] = "Detalles del Proceso";
     // Definimos si el proceso está cerrado para usarlo en varios puntos
     bool esProcesoCerrado = Model.IdEstatus == 3;
+    var candidatosPorEleccion = ViewBag.CandidatosPorEleccion as Dictionary<int, int> ?? new Dictionary<int, int>();
+    var urnasPorEleccion = ViewBag.UrnasPorEleccion as Dictionary<int, int> ?? new Dictionary<int, int>();
 }
 
 <div class="container-fluid py-4">
@@ -77,10 +79,10 @@
                                     <h6 class="mb-2 fw-bold">@eleccion.Nombre</h6>
                                     <div class="d-flex flex-wrap gap-2">
                                         <span class="badge bg-light text-dark border small fw-normal">
-                                            <i class="fas fa-tablet-alt me-1 text-info"></i> 0 Urnas
+                                            <i class="fas fa-tablet-alt me-1 text-info"></i> @(urnasPorEleccion.ContainsKey(eleccion.Id) ? urnasPorEleccion[eleccion.Id] : 0) Urnas
                                         </span>
                                         <span class="badge bg-light text-dark border small fw-normal">
-                                            <i class="fas fa-users me-1 text-primary"></i> 0 Candidatos
+                                            <i class="fas fa-users me-1 text-primary"></i> @(candidatosPorEleccion.ContainsKey(eleccion.Id) ? candidatosPorEleccion[eleccion.Id] : 0) Candidatos
                                         </span>
                                     </div>
                                 </div>
