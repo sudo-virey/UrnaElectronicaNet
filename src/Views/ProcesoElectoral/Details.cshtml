@@ -12,7 +12,7 @@
 
 <div class="container-fluid py-4">
     <div style="margin-bottom: 1.5rem;">
-        <a href="@Url.Action("Index")" class="btn-secondary-outline" style="text-decoration:none;">
+        <a href="@Url.Action("Index")" class="btn-secondary-outline detail-back-link">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
@@ -28,8 +28,7 @@
                     </p>
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                    <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2 shadow-sm"
-                          style="font-size: 0.9rem;">
+                      <span class="badge @(Model.IdEstatus == 1 ? "bg-success" : "bg-secondary") p-2 mb-2 shadow-sm detail-meta-badge">
                         <i class="fas @(esProcesoCerrado ? "fa-archive" : "fa-check-circle") me-1"></i>
                         @ProcesoElectoralController.ObtenerEstatusTexto(Model.IdEstatus)
                     </span>
@@ -73,7 +72,7 @@
                 <div class="list-group list-group-flush">
                     @foreach (var eleccion in Model.Elecciones.Where(e => !e.Eliminado))
                     {
-                        <div class="list-group-item p-3 list-group-item-action">
+                        <div class="list-group-item p-3 list-group-item-action detail-item-hover">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="flex-grow-1">
                                     <h6 class="mb-2 fw-bold">@eleccion.Nombre</h6>
@@ -87,20 +86,23 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex gap-2 align-items-center">
+                                <div class="d-flex align-items-center">
                                     @* Botones de acceso rápido siempre visibles *@
-                                    <button hx-get="/UrnaEleccion/Listar/@eleccion.Id"
+                                    <button type="button"
+                                            hx-get="/UrnaEleccion/Listar/@eleccion.Id"
                                             hx-target="#urnas-area-@eleccion.Id"
                                             hx-swap="innerHTML"
-                                            class="btn btn-sm btn-outline-info"
+                                            class="btn-icon"
+                                            style="color: #0dcaf0; margin-left: 10px; background:none; border:none; cursor:pointer;"
                                             title="Gestionar Urnas">
                                         <i class="fas fa-tablet-alt"></i>
                                     </button>
                                    
                                     <button type="button"
-                                            class="btn btn-sm btn-outline-primary js-toggle-candidatos"
+                                            class="btn-icon js-toggle-candidatos"
                                             data-eleccion-id="@eleccion.Id"
                                             data-expanded="false"
+                                            style="color: #0d6efd; margin-left: 10px; background:none; border:none; cursor:pointer;"
                                             title="Ver candidatos"
                                             aria-label="Ver candidatos">
                                         <i class="fas fa-users"></i>
@@ -108,15 +110,21 @@
                                     @if (!esProcesoCerrado)
                                     {
                                         @* NUEVO: Botón Editar *@
-                                        <button hx-get="/Eleccion/Edit/@eleccion.Id"      hx-target="#modal-container"  class="btn-icon"
-                                                title="Editar Elección"             style="background:none; border:none; cursor:pointer;">
+                                        <button type="button"
+                                                hx-get="/Eleccion/Edit/@eleccion.Id"
+                                                hx-target="#modal-container"
+                                                class="btn-icon"
+                                                style="margin-left: 10px; background:none; border:none; cursor:pointer;"
+                                                title="Editar Elección">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         @* Icono de eliminar con HTMX *@
-                                        <button hx-post="/Eleccion/Delete/@eleccion.Id"
+                                        <button type="button"
+                                                hx-post="/Eleccion/Delete/@eleccion.Id"
                                                 hx-confirm="¿Estás seguro de que deseas eliminar la elección '@eleccion.Nombre'?"
                                                 hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
-                                                class="btn btn-sm btn-outline-danger" title="Eliminar Elección"
+                                                class="btn-icon"
+                                                title="Eliminar Elección"
                                                 style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
@@ -139,19 +147,3 @@
 </div>
 
 <div id="modal-container"></div>
-
-<style>
-    /* Ajustes para mejorar la experiencia móvil */
-    .btn-sm {
-        padding: 0.4rem 0.6rem;
-    }
-
-    .list-group-item:hover {
-        background-color: #f8f9fa;
-    }
-
-    /* Evitar que el dropdown se corte en móviles */
-    .dropdown-menu {
-        z-index: 1050;
-    }
-</style>

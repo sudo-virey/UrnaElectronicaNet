@@ -7,24 +7,24 @@
     var estatusMap = ViewBag.EstatusMap as Dictionary<int, string> ?? new Dictionary<int, string>();
 }
 
-<div class="mt-3 p-3 border-start border-4" style="background-color: #f8fcff; border-color: #17a2b8 !important;">
+<div class="inline-panel inline-panel--urnas">
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h6 class="fw-bold text-info mb-0"><i class="fas fa-tablet-alt me-1"></i> Urnas Asignadas</h6>
+        <h6 class="inline-panel__title text-info"><i class="fas fa-tablet-alt me-1"></i> Urnas Asignadas</h6>
         <button hx-get="/UrnaEleccion/Create?eleccionId=@ViewBag.IdEleccion"
                 hx-target="#modal-container"
-                class="btn btn-sm btn-info text-white">
+                class="btn-primary-action" style="border:none; cursor:pointer;">
             <i class="fas fa-plus"></i> Asignar Urna
         </button>
     </div>
 
     @if (!Model.Any())
     {
-        <p class="text-muted small italic">No hay urnas asignadas en esta elección.</p>
+        <p class="inline-panel__empty">No hay urnas asignadas en esta elección.</p>
     }
     else
     {
         <div class="table-responsive">
-            <table class="table table-sm table-hover align-middle" style="font-size: 0.85rem;">
+            <table class="table table-sm table-hover align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Urna</th>
