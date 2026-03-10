@@ -124,6 +124,12 @@ function initializeEventListeners() {
             return;
         }
 
+        // Ocultar urnas cuando se abren candidatos
+        const urinasArea = document.querySelector(`#urnas-area-${idEleccion}`);
+        if (urinasArea) {
+            urinasArea.innerHTML = '';
+        }
+
         if (typeof htmx === 'undefined') {
             return;
         }
@@ -134,6 +140,30 @@ function initializeEventListeners() {
         });
 
         setToggleCandidatosState(toggleButton, true);
+    });
+
+    // Manejador para el botón de urnas asignadas
+    document.body.addEventListener('click', function (event) {
+        const toggleButton = event.target.closest('.js-toggle-urnas');
+        if (!toggleButton) {
+            return;
+        }
+
+        const idEleccion = toggleButton.getAttribute('data-eleccion-id');
+        if (!idEleccion) {
+            return;
+        }
+
+        // Ocultar candidatos cuando se abren urnas
+        const candidatosArea = document.querySelector(`#candidatos-area-${idEleccion}`);
+        const candidatosToggle = document.querySelector(`.js-toggle-candidatos[data-eleccion-id="${idEleccion}"]`);
+
+        if (candidatosArea && candidatosArea.innerHTML.trim() !== '') {
+            candidatosArea.innerHTML = '';
+            if (candidatosToggle) {
+                setToggleCandidatosState(candidatosToggle, false);
+            }
+        }
     });
 
     document.body.addEventListener('change', function (event) {
