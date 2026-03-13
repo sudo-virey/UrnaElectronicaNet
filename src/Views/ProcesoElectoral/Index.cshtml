@@ -45,12 +45,15 @@
                         }
                     </td>
                     <td style="text-align:right;">
-                         <a href="@Url.Action("Details", "ProcesoElectoral", new { id = proceso.Id })" 
-                            class="btn-icon" 
+                        <button type="button"
+                                onclick="window.location.href='@Url.Action("Details", "ProcesoElectoral", new { id = proceso.Id })'"
+                                class="btn-icon"
                                 style="background:none; border:none; cursor:pointer;"
-                            title="Ver detalles del proceso">
-                                <i class="fas fa-eye"></i>
-                        </a>
+                                title="Ver detalles del proceso">
+                            <i class="fas fa-eye"></i>
+                        </button>
+
+
                         <button hx-get="/ProcesoElectoral/Edit/@proceso.Id" hx-target="#modal-container" 
                          class="btn-icon" 
                                 style="background:none; border:none; cursor:pointer;">
@@ -63,6 +66,7 @@
                                  style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
                            
                             <i class="fas fa-trash-alt"></i>
+                            </button>
                     </td>
                 </tr>
             }
