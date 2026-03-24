@@ -693,3 +693,24 @@ html, body {
         gap: 1rem;
     }
 }*/
+
+/* Clase estándar para botones de acción en tarjetas */
+.btn-action-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-action-icon i {
+    font-size: 1.1rem;
+}

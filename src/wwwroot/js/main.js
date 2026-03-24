@@ -99,6 +99,20 @@ function initializeEventListeners() {
         }
     }
 
+    function setToggleUrnasState(toggleButton, expanded) {
+        const icon = toggleButton.querySelector('i');
+        const nextTitle = expanded ? 'Ocultar urnas' : 'Gestionar Urnas';
+
+        toggleButton.setAttribute('data-expanded', expanded ? 'true' : 'false');
+        toggleButton.setAttribute('title', nextTitle);
+        toggleButton.setAttribute('aria-label', nextTitle);
+
+        if (icon) {
+            icon.classList.remove('fa-tablet-alt', 'fa-times');
+            icon.classList.add(expanded ? 'fa-times' : 'fa-tablet-alt');
+        }
+    }
+
     document.body.addEventListener('click', function (event) {
         const toggleButton = event.target.closest('.js-toggle-candidatos');
         if (!toggleButton) {
@@ -149,8 +163,25 @@ function initializeEventListeners() {
             return;
         }
 
+        event.preventDefault();
+        event.stopPropagation();
+
         const idEleccion = toggleButton.getAttribute('data-eleccion-id');
         if (!idEleccion) {
+            return;
+        }
+
+        const targetSelector = `#urnas-area-${idEleccion}`;
+        const target = document.querySelector(targetSelector);
+        if (!target) {
+            return;
+        }
+
+        const expanded = toggleButton.getAttribute('data-expanded') === 'true';
+
+        if (expanded) {
+            target.innerHTML = '';
+            setToggleUrnasState(toggleButton, false);
             return;
         }
 
@@ -164,6 +195,17 @@ function initializeEventListeners() {
                 setToggleCandidatosState(candidatosToggle, false);
             }
         }
+
+        if (typeof htmx === 'undefined') {
+            return;
+        }
+
+        htmx.ajax('GET', `/UrnaEleccion/Listar/${idEleccion}`, {
+            target: targetSelector,
+            swap: 'innerHTML'
+        });
+
+        setToggleUrnasState(toggleButton, true);
     });
 
     document.body.addEventListener('change', function (event) {
