@@ -9,7 +9,7 @@
 
 <div class="inline-panel inline-panel--urnas">
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h6 class="inline-panel__title text-info"><i class="fas fa-tablet-alt me-1"></i> Urnas Asignadas</h6>
+        <h6 class="inline-panel__title text-institutional"><i class="fas fa-tablet-alt me-1"></i> Urnas Asignadas</h6>
         <button hx-get="/UrnaEleccion/Create?eleccionId=@ViewBag.IdEleccion"
                 hx-target="#modal-container"
                 class="btn-primary-action" style="border:none; cursor:pointer;">
@@ -58,7 +58,7 @@
                             <td class="text-end">
                                 <button hx-get="/UrnaEleccion/Edit/@item.IdUrnaEleccion"
                                         hx-target="#modal-container"
-                                        class="btn btn-link btn-sm text-primary p-0 me-2"
+                                        class="btn-icon btn-no-bg ml-10"
                                         title="Editar asignación">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -68,7 +68,7 @@
                                         hx-swap="innerHTML"
                                         hx-confirm="¿Eliminar asignación de urna?"
                                         hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
-                                        class="btn btn-link btn-sm text-danger p-0"
+                                        class="btn-icon btn-no-bg ml-10 text-danger"
                                         title="Eliminar asignación">
                                     <i class="fas fa-trash"></i>
                                 </button>

@@ -97,6 +97,12 @@ function initializeEventListeners() {
             icon.classList.remove('fa-users', 'fa-user-slash');
             icon.classList.add(expanded ? 'fa-user-slash' : 'fa-users');
         }
+
+        if (expanded) {
+            toggleButton.classList.add('active');
+        } else {
+            toggleButton.classList.remove('active');
+        }
     }
 
     function setToggleUrnasState(toggleButton, expanded) {
@@ -110,6 +116,12 @@ function initializeEventListeners() {
         if (icon) {
             icon.classList.remove('fa-tablet-alt', 'fa-times');
             icon.classList.add(expanded ? 'fa-times' : 'fa-tablet-alt');
+        }
+
+        if (expanded) {
+            toggleButton.classList.add('active');
+        } else {
+            toggleButton.classList.remove('active');
         }
     }
 
@@ -140,8 +152,12 @@ function initializeEventListeners() {
 
         // Ocultar urnas cuando se abren candidatos
         const urinasArea = document.querySelector(`#urnas-area-${idEleccion}`);
+        const urnasToggle = document.querySelector(`.js-toggle-urnas[data-eleccion-id="${idEleccion}"]`);
         if (urinasArea) {
             urinasArea.innerHTML = '';
+            if (urnasToggle) {
+                setToggleUrnasState(urnasToggle, false);
+            }
         }
 
         if (typeof htmx === 'undefined') {
@@ -189,7 +205,7 @@ function initializeEventListeners() {
         const candidatosArea = document.querySelector(`#candidatos-area-${idEleccion}`);
         const candidatosToggle = document.querySelector(`.js-toggle-candidatos[data-eleccion-id="${idEleccion}"]`);
 
-        if (candidatosArea && candidatosArea.innerHTML.trim() !== '') {
+        if (candidatosArea) {
             candidatosArea.innerHTML = '';
             if (candidatosToggle) {
                 setToggleCandidatosState(candidatosToggle, false);

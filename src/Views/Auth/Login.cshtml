@@ -26,6 +26,17 @@
                 <!-- <p>Inicio de sesión</p>-->
             </div>
 
+
+            @{
+                var motivo = Context.Request.Query["motivo"].ToString();
+            }
+            @if (motivo == "expirada")
+            {
+                <div class="error-message" style="background:#fff3cd; color:#856404; border:1px solid #ffeeba; padding:0.7em 1em; border-radius:8px; margin-bottom:1em; font-weight:600;">
+                    Tu sesión ha expirado por inactividad. Por favor, inicia sesión nuevamente.
+                </div>
+            }
+
             @if (Model != null && !ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
             {
                 @foreach (var modelState in ViewData.ModelState.Values)

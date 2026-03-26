@@ -7,7 +7,7 @@
 
 <div class="inline-panel inline-panel--candidatos">
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h6 class="inline-panel__title text-primary"><i class="fas fa-users me-1"></i> Candidatos Registrados</h6>
+        <h6 class="inline-panel__title text-institutional"><i class="fas fa-users me-1"></i> Candidatos Registrados</h6>
         <button hx-get="/Candidato/Create?eleccionId=@ViewBag.IdEleccion" 
                 hx-target="#modal-container" 
                 class="btn-primary-action" style="border:none; cursor:pointer;">
@@ -61,15 +61,15 @@
                                 <span class="badge inline-color-chip" style="background-color:@item.ColorFondo; color:@item.ColorTexto;">Abc</span>
                             </td>
                             <td class="text-end">
-                                <button hx-get="/Candidato/Edit/@item.Id" hx-target="#modal-container" class="btn btn-link btn-sm text-primary p-0 me-2">
+                                <button hx-get="/Candidato/Edit/@item.Id" hx-target="#modal-container" class="btn-icon btn-no-bg ml-10" title="Editar candidato">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button hx-post="/Candidato/Delete/@item.Id?eleccionId=@ViewBag.IdEleccion"
                                     hx-target="#candidatos-area-@ViewBag.IdEleccion"
                                     hx-swap="innerHTML"
-                                        hx-confirm="¿Eliminar a @item.Nombre?"
+                                    hx-confirm="¿Eliminar a @item.Nombre?"
                                     hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
-                                        class="btn btn-link btn-sm text-danger p-0">
+                                    class="btn-icon btn-no-bg ml-10 text-danger" title="Eliminar candidato">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>

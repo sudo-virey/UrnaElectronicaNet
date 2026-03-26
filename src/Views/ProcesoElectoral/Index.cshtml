@@ -6,12 +6,12 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 
-<div class="page-header" style="margin-bottom: 2rem;">
+<div class="page-header mb-0">
     <h1>Procesos Electorales</h1>
     <p class="subtitle">Gestión de elecciones y configuración de cierre</p>
 </div>
 
-<div style="margin: 2rem 0;">
+<div style="margin-bottom: 2rem;">
     <button hx-get="/ProcesoElectoral/Create" hx-target="#modal-container" class="btn-primary-action" style="border:none; cursor:pointer;">
         <i class="fas fa-plus"></i> Registrar Proceso
     </button>
@@ -24,7 +24,7 @@
                 <th>Nombre</th>
                 <th>Fecha Evento</th>
                 <th>Estado</th>
-                <th style="text-align:right;">Acciones</th>
+                <th class="text-end">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -37,36 +37,32 @@
                          @if (proceso.IdEstatus == 1)
                         {
                             @* Cambia 'badge-success' por 'badge-activo' si usas tus estilos personalizados *@
-                            <span class="badge badge-success" style="background-color: #d4edda; color: #155724; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.75rem;">ACTIVO</span>
+                            <span class="badge badge-success">ACTIVO</span>
                         }
                         else
                         {
-                            <span class="badge badge-secondary" style="background-color: #e2e3e5; color: #383d41; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.75rem;">FINALIZADO</span>
+                            <span class="badge badge-secondary">FINALIZADO</span>
                         }
                     </td>
-                    <td style="text-align:right;">
+                    <td class="text-end">
                         <button type="button"
                                 onclick="window.location.href='@Url.Action("Details", "ProcesoElectoral", new { id = proceso.Id })'"
-                                class="btn-icon"
-                                style="background:none; border:none; cursor:pointer;"
+                                class="btn-icon btn-no-bg"
                                 title="Ver detalles del proceso">
                             <i class="fas fa-eye"></i>
                         </button>
 
 
                         <button hx-get="/ProcesoElectoral/Edit/@proceso.Id" hx-target="#modal-container" 
-                         class="btn-icon" 
-                                style="background:none; border:none; cursor:pointer;">
+                            class="btn-icon btn-no-bg" >
                             <i class="fas fa-edit"></i>
                         </button>
                         <button hx-post="/ProcesoElectoral/Delete/@proceso.Id"
                                 hx-confirm="¿Deseas eliminar este proceso electoral?"
                                 hx-headers='{"RequestVerificationToken": "@Antiforgery.GetAndStoreTokens(Context).RequestToken"}'
-                                class="btn-icon" 
-                                 style="color: #dc3545; margin-left: 10px; background:none; border:none; cursor:pointer;">
-                           
+                                class="btn-icon btn-no-bg ml-10 text-danger">
                             <i class="fas fa-trash-alt"></i>
-                            </button>
+                        </button>
                     </td>
                 </tr>
             }

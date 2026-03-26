@@ -16,7 +16,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // 30 minutos para pruebas
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });

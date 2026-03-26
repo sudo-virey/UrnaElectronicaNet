@@ -52,14 +52,14 @@ namespace UrnaElectronica.Middleware
 
                     if (esRequestHtmx)
                     {
-                        context.Response.Headers["HX-Redirect"] = "/Auth/Login";
+                        context.Response.Headers["HX-Redirect"] = "/Auth/Login?motivo=expirada";
                         context.Response.StatusCode = StatusCodes.Status200OK;
                         context.Response.ContentType = "text/html; charset=utf-8";
-                        await context.Response.WriteAsync("<script>window.location='/Auth/Login';</script>");
+                        await context.Response.WriteAsync("<script>window.location='/Auth/Login?motivo=expirada';</script>");
                         return;
                     }
 
-                    context.Response.Redirect("/Auth/Login");
+                    context.Response.Redirect("/Auth/Login?motivo=expirada");
                     return;
                 }
             }
