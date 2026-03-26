@@ -17,7 +17,7 @@ namespace UrnaElectronica.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Listar(int id)
+        public async Task<IActionResult> Listar(int id, bool esProcesoFinalizado = false, bool eleccionActiva = true)
         {
             var urnasEleccion = await _context.UrnasElecciones
                 .Where(ue => ue.IdEleccion == id && !ue.Eliminado)
@@ -32,6 +32,8 @@ namespace UrnaElectronica.Controllers
             ViewBag.IdEleccion = id;
             ViewBag.UrnasMap = urnas.ToDictionary(u => u.Id_Urna, u => u.Nombre);
             ViewBag.EstatusMap = GetEstatusMap();
+            ViewBag.EsProcesoFinalizado = esProcesoFinalizado;
+            ViewBag.EleccionActiva = eleccionActiva;
 
             return PartialView(ListaPartialPath, urnasEleccion);
         }

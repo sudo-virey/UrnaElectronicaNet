@@ -16,7 +16,7 @@ namespace UrnaElectronica.Data
         /// <summary>
         /// Obtiene un usuario por ID.
         /// </summary>
-        Task<Usuario> ObtenerPorIdAsync(int id);
+        Task<Usuario?> ObtenerPorIdAsync(int id);
 
         /// <summary>
         /// Obtiene un usuario por email.

@@ -74,9 +74,16 @@ function initializeEventListeners() {
             return;
         }
 
+        const eleccionCard = document.querySelector(`[data-eleccion-id="${idEleccion}"]`);
+        let esProcesoFinalizado = false;
+        let eleccionActiva = true;
+        if (eleccionCard) {
+            esProcesoFinalizado = eleccionCard.getAttribute('data-proceso-finalizado') === 'true';
+            eleccionActiva = eleccionCard.getAttribute('data-eleccion-activa') === 'true';
+        }
         const targetSelector = `#urnas-area-${idEleccion}`;
         if (document.querySelector(targetSelector)) {
-            htmx.ajax('GET', `/UrnaEleccion/Listar/${idEleccion}`, {
+            htmx.ajax('GET', `/UrnaEleccion/Listar/${idEleccion}?esProcesoFinalizado=${esProcesoFinalizado}&eleccionActiva=${eleccionActiva}`, {
                 target: targetSelector,
                 swap: 'innerHTML'
             });

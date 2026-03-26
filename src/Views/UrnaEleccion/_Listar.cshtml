@@ -2,19 +2,28 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{ Layout = null; }
 
+
 @{
     var urnasMap = ViewBag.UrnasMap as Dictionary<int, string> ?? new Dictionary<int, string>();
     var estatusMap = ViewBag.EstatusMap as Dictionary<int, string> ?? new Dictionary<int, string>();
+    bool esFinalizado = false;
+    bool.TryParse(ViewBag.EsProcesoFinalizado?.ToString() ?? "false", out esFinalizado);
+    bool eleccionActiva = true;
+    bool.TryParse(ViewBag.EleccionActiva?.ToString() ?? "true", out eleccionActiva);
+    Console.WriteLine($"[DEBUG] Es proceso finalizado: {esFinalizado}, Elección activa: {eleccionActiva}");
 }
 
 <div class="inline-panel inline-panel--urnas">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h6 class="inline-panel__title text-institutional"><i class="fas fa-tablet-alt me-1"></i> Urnas Asignadas</h6>
-        <button hx-get="/UrnaEleccion/Create?eleccionId=@ViewBag.IdEleccion"
-                hx-target="#modal-container"
-                class="btn-primary-action" style="border:none; cursor:pointer;">
-            <i class="fas fa-plus"></i> Asignar Urna
-        </button>
+        @if (!(esFinalizado || !eleccionActiva))
+        {
+            <button hx-get="/UrnaEleccion/Create?eleccionId=@ViewBag.IdEleccion"
+                    hx-target="#modal-container"
+                    class="btn-primary-action" style="border:none; cursor:pointer;">
+                <i class="fas fa-plus"></i> Asignar Urna
+            </button>
+        }
     </div>
 
     @if (!Model.Any())

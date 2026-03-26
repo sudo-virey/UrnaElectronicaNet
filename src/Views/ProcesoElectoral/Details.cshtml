@@ -10,7 +10,14 @@
     var urnasPorEleccion = ViewBag.UrnasPorEleccion as Dictionary<int, int> ?? new Dictionary<int, int>();
 }
 
-<div class="container-fluid py-4">
+
+<div class="page-header mb-0">
+    <h1>Elecciones del Proceso</h1>
+    <p class="subtitle">Puedes gestionar las elecciones asociadas a este proceso electoral.</p>
+</div>
+
+
+<div class="container-fluid py-2">
     <nav aria-label="breadcrumb" class="mb-2">
         <ol class="breadcrumb" style="background: none; padding: 0; margin-bottom: 0;">
             <li class="breadcrumb-item">
@@ -32,7 +39,7 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-12 col-md-8">
-                    <h1 class="h3 mb-1 fw-bold">@Model.Nombre</h1>
+                    <h3 class="h3 mb-1 fw-bold">@Model.Nombre</h3>
                     <p class="text-muted mb-2 mb-md-0">
                         <i class="far fa-calendar-alt me-1"></i>
                         Fecha del Evento: <strong>@(Model.FechaEvento?.ToString("dd/MM/yyyy") ?? "No asignada")</strong>
@@ -43,7 +50,6 @@
                         <i class="fas @(esProcesoCerrado ? "fa-archive" : "fa-check-circle") me-1"></i>
                         @ProcesoElectoralController.ObtenerEstatusTexto(Model.IdEstatus)
                     </span>
-                    <div class="text-muted small">Creado: @Model.FechaCreacion.ToString("dd/MM/yyyy")</div>
                 </div>
             </div>
         </div>
@@ -101,6 +107,8 @@
                                     <button type="button"
                                             class="btn-icon btn-no-bg js-toggle-urnas"
                                             data-eleccion-id="@eleccion.Id"
+                                            data-proceso-finalizado="@esProcesoCerrado.ToString().ToLower()"
+                                            data-eleccion-activa="@eleccion.Activo.ToString().ToLower()"
                                             data-expanded="false"
                                             title="Gestionar Urnas"
                                             aria-label="Gestionar Urnas">

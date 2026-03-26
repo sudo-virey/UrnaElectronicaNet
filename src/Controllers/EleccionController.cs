@@ -90,7 +90,7 @@ namespace UrnaElectronica.Controllers
                     return Ok();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Aquí podrías loguear el error o manejarlo de alguna forma
                 ModelState.AddModelError(string.Empty, "Ocurrió un error al actualizar la elección.");
